@@ -1,0 +1,78 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat"><html lang="en-US" data-colors-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex">  <meta name="built-on" content="2024-01-18T20:56:23.188952"><meta name="build-number" content="${buildNumber}">       <title>Test Fixture 클렌징 | Spring-JPA기반-테스트</title><script id="virtual-toc-data" type="application/json">[]</script><script id="topic-shortcuts" type="application/json"></script><link href="https://resources.jetbrains.com/writerside/apidoc/6.6.6-b205/app.css" rel="stylesheet">   <link rel="apple-touch-icon" sizes="180x180" href="https://jetbrains.com/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="https://jetbrains.com/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="https://jetbrains.com/favicon-16x16.png"><link rel="manifest" href="https://jetbrains.com/site.webmanifest"><link rel="mask-icon" href="https://jetbrains.com/safari-pinned-tab.svg" color="#000000"><meta name="msapplication-TileColor" content="#000000"/><meta name="msapplication-TileImage" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-144x144.png"/><meta name="msapplication-square70x70logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-70x70.png"/><meta name="msapplication-square150x150logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-150x150.png"/><meta name="msapplication-wide310x150logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-310x150.png"/><meta name="msapplication-square310x310logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-310x310.png"/>  <meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="Test Fixture 클렌징 | Spring-JPA기반-테스트"/><meta property="og:description" content=""/><meta property="og:image" content=""/><meta property="og:site_name" content="Spring-JPA기반-테스트 Help"/><meta property="og:type" content="website"/><meta property="og:locale" content="en_US"/><meta property="og:url" content="/jpa-spring/1.0/06-test-fixture-클렌징.html"/><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="Test Fixture 클렌징 | Spring-JPA기반-테스트"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json"> { "@context": "http://schema.org", "@type": "WebPage", "@id": "/jpa-spring/1.0/06-test-fixture-클렌징.html#webpage", "url": "/jpa-spring/1.0/06-test-fixture-클렌징.html", "name": "Test Fixture 클렌징 | Spring-JPA기반-테스트", "description": "", "image": "", "inLanguage":"en-US" }</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json"> { "@type": "WebSite", "@id": "/jpa-spring/#website", "url": "/jpa-spring/", "name": "Spring-JPA기반-테스트 Help" }</script><!-- End Schema.org --></head>      <body data-id="06-Test-Fixture-클렌징" data-main-title="Test Fixture 클렌징" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}"  data-template="article"  data-breadcrumbs="더-나은-테스트를-작성하기-위한-구체적-조언.md|더 나은 테스트를 작성하기 위한 구체적 조언"  >   <div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>Spring-JPA기반-테스트 1.0 Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="06-Test-Fixture-클렌징"   id="06-Test-Fixture-클렌징.md">Test Fixture 클렌징</h1>  <p id="ed3386d0_124">Order Entity</p><p id="ed3386d0_125">오더 엔티티의 관계 매핑을 보면</p><p id="ed3386d0_126">다대 다 연관 관계의 중간을 풀어주는 OrderProduct로 매핑을 했는데</p><p id="ed3386d0_127">Order &harr; OrderProduct &rarr; Product</p><p id="ed3386d0_128">OrderProduct 는 FK를 둘다 가지고 있는 상태다.</p><p id="ed3386d0_129">Product는 Order와 OrderProduct의 존재를 모르고,몰라야하기때문에 단방향 설계로 되어있다.</p><p id="ed3386d0_130">OrderProductRepository를 별도로 지우는 작업을 했다.</p><p id="ed3386d0_131">얘를 지우지 않으면 다른 테스트에 영향을 주니까 지워줬다.</p><div class="code-block" data-lang="java"         >
+@AfterEach
+void tearDown() {
+    **orderProductRepository**.deleteAllInBatch();
+    productRepository.deleteAllInBatch();
+    orderRepository.deleteAllInBatch();
+    stockRepository.deleteAllInBatch();
+}
+Hibernate: 
+    delete 
+    from
+        **order_product**
+Hibernate: 
+    delete 
+    from
+        product
+Hibernate: 
+    delete 
+    from
+        orders
+Hibernate: 
+    delete 
+    from
+        stock
+</div><aside class="prompt" data-type="tip" data-title="" id="ed3386d0_133"><p id="ed3386d0_134">순서를 변경해서 productRepository를 먼저 삭제한다.</p></aside><div class="code-block" data-lang="java"         >
+@AfterEach
+void tearDown() {
+    productRepository.deleteAllInBatch();
+    **orderProductRepository**.deleteAllInBatch();
+    orderRepository.deleteAllInBatch();
+    stockRepository.deleteAllInBatch();
+}
+FKHNFGQYJX3I80QOYMRSSLS3KNO 예외발생
+</div><p id="ed3386d0_136">Product 의 key (id)가 OrderProduct FK로 참조가 되고있다.</p><p id="ed3386d0_137">그래서 지을수 없다는 예외가 발생했다.</p><p id="ed3386d0_138">FK를 가지고 있는 테이블을 먼저 지워야 한다.</p><dl id="ed3386d0_139" data-style="title-top"><dt id="ed3386d0_140" data-expandable="false">deleteAllInBatch()</dt><dd><p id="ed3386d0_142">테이블 전체를 지우는 메서드 외래키 등 조건이 순서에 따라 예외가 발생할수 있어서 순서에 대한 고민을 해야한다.</p></dd></dl><aside class="prompt" data-type="tip" data-title="" id="ed3386d0_143"><p id="ed3386d0_144">deleteAllInBatch()</p></aside><div class="code-block" data-lang="java"         >
+// 해당 레포지토리
+delete * from table_0
+</div><aside class="prompt" data-type="tip" data-title="" id="ed3386d0_146"><p id="ed3386d0_147">deleteAll()</p></aside><div class="code-block" data-lang="java"         >
+// 해당 리포지토리를 조회
+Hibernate: 
+    select
+        o1_0.id,
+        o1_0.create_date_time,
+        o1_0.modified_data_time,
+        o1_0.order_status,
+        o1_0.registered_date_time,
+        o1_0.total_price 
+    from
+        orders o1_0
+Hibernate: 
+    select
+        o1_0.order_id,
+        o1_0.id,
+        o1_0.create_date_time,
+        o1_0.modified_data_time,
+        o1_0.product_id 
+    from
+        order_product o1_0 
+    where
+        o1_0.order_id=?
+Hibernate: 
+    delete 
+    from
+        order_product 
+    where
+        id=?
+Hibernate: 
+    delete 
+    from
+        order_product 
+    where
+        id=?
+Hibernate: 
+    delete 
+    from
+        orders 
+    where
+        id=?
+</div><ol class="list _decimal" id="ed3386d0_149" type="1"><li class="list__item" id="ed3386d0_150"><p>삭제하려는 리포지토리를 조회</p></li><li class="list__item" id="ed3386d0_151"><p>FK로 연결된 테이블을 찾아서 한번 더 조회 (order &harr; orderProduct)</p></li><li class="list__item" id="ed3386d0_152"><p>orderProduct를 하나씩 지운다.</p></li><li class="list__item" id="ed3386d0_153"><p>order를 하나씩 지운다.</p></li></ol><dl id="ed3386d0_154" data-style="title-top"><dt id="ed3386d0_155" data-expandable="false">장점</dt><dd><p id="ed3386d0_157">OrderProductRepository를 따로 삭제를 하지 않아도 삭제가 된다. 그래도 순서가 중요해서 Product는 orderProduct의 존재를 모르기때문에 order를 먼저 지워야 FK 예외가 발생하지 않는다.</p></dd></dl><aside class="prompt" data-type="tip" data-title="" id="ed3386d0_158"><p id="ed3386d0_159">강사 대부분 @Transactional로 롤백을 처리하면 위와 같은 데이터 삭제에 대한 순서를 알 필요가 없지만, 사이드 이펙트로 발생하는 실제 객체에 @Transactional의 확인 여부가 필요하고 스프링 배치를 사용하게 된다면 여러 트랜잭션이 섞이기 때문에 사용하기가 어렵다. FK가 어디에 저장되어있는지 연관관계와 삭제 순서를 신경쓴다면 불필요한 쿼리가 날라가지않는 .deleteAllInBatch()가 쿼리가 깔끔하게 작성되고 FK와 연관된 Entity에 대해서 찾아서 지워주는 방식인 deleteAll()이 있다 필요한 상황에 맞게 사용하는게 좋다.</p></aside><div class="last-modified"> Last modified: 18 1월 2024</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom">  <a class="navigation-links__prev" href="05-한-눈에-들어오는-test-fixture-구성하기.html">한 눈에 들어오는 Test Fixture 구성하기</a>   <a class="navigation-links__next" href="parameterizedtest.html">@ParameterizedTest</a>  </div></article><div id="disqus_thread"></div></div></section></main></div>  <script src="https://resources.jetbrains.com/writerside/apidoc/6.6.6-b205/app.js"></script></body></html>

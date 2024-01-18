@@ -1,0 +1,58 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat"><html lang="en-US" data-colors-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex">  <meta name="built-on" content="2024-01-18T20:56:23.1515137"><meta name="build-number" content="${buildNumber}">       <title>학습 테스트 | Spring-JPA기반-테스트</title><script id="virtual-toc-data" type="application/json">[{"id":"efeae7d2_130","level":0,"title":"코드 작성","anchor":"#efeae7d2_130"},{"id":"vs","level":0,"title":"영구적 vs 일회성","anchor":"#vs"}]</script><script id="topic-shortcuts" type="application/json"></script><link href="https://resources.jetbrains.com/writerside/apidoc/6.6.6-b205/app.css" rel="stylesheet">   <link rel="apple-touch-icon" sizes="180x180" href="https://jetbrains.com/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="https://jetbrains.com/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="https://jetbrains.com/favicon-16x16.png"><link rel="manifest" href="https://jetbrains.com/site.webmanifest"><link rel="mask-icon" href="https://jetbrains.com/safari-pinned-tab.svg" color="#000000"><meta name="msapplication-TileColor" content="#000000"/><meta name="msapplication-TileImage" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-144x144.png"/><meta name="msapplication-square70x70logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-70x70.png"/><meta name="msapplication-square150x150logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-150x150.png"/><meta name="msapplication-wide310x150logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-310x150.png"/><meta name="msapplication-square310x310logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-310x310.png"/>  <meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="학습 테스트 | Spring-JPA기반-테스트"/><meta property="og:description" content=""/><meta property="og:image" content=""/><meta property="og:site_name" content="Spring-JPA기반-테스트 Help"/><meta property="og:type" content="website"/><meta property="og:locale" content="en_US"/><meta property="og:url" content="/jpa-spring/1.0/01-학습-테스트.html"/><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="학습 테스트 | Spring-JPA기반-테스트"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json"> { "@context": "http://schema.org", "@type": "WebPage", "@id": "/jpa-spring/1.0/01-학습-테스트.html#webpage", "url": "/jpa-spring/1.0/01-학습-테스트.html", "name": "학습 테스트 | Spring-JPA기반-테스트", "description": "", "image": "", "inLanguage":"en-US" }</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json"> { "@type": "WebSite", "@id": "/jpa-spring/#website", "url": "/jpa-spring/", "name": "Spring-JPA기반-테스트 Help" }</script><!-- End Schema.org --></head>      <body data-id="01-학습-테스트" data-main-title="학습 테스트" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}"  data-template="article"  data-breadcrumbs="Appendix.md|Appendix"  >   <div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>Spring-JPA기반-테스트 1.0 Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="01-학습-테스트"   id="01-학습-테스트.md">학습 테스트</h1>  <aside class="prompt" data-type="tip" data-title="" id="efeae7d2_118"><p id="efeae7d2_119">테스트를 학습의 도구로 활용하는 방법</p></aside><ul class="list _ul" id="efeae7d2_120"><li class="list__item" id="efeae7d2_121"><p>잘 모르는 기능, 라이브러리 , 프레임워크를 학습하기 위해 작성하는 테스트</p></li><li class="list__item" id="efeae7d2_122"><p>여러 테스트 케이스를 스스로 정의하고 검증하는 과정을 통해 보다 구체적인 동작과 기능을 학습할 수 있다</p></li><li class="list__item" id="efeae7d2_123"><p>관련 문서만 읽는 것보다 훨씬 재미있게 학습할 수 있다.</p></li></ul><dl id="efeae7d2_124" data-style="title-top"><dt id="efeae7d2_125" data-expandable="false">사용 방식</dt><dd><ol class="list _decimal" id="efeae7d2_127" type="1"><li class="list__item" id="efeae7d2_128"><p>테스트를 도구로 활용하여 여러 테스트 케이스를 정의합니다.</p></li><li class="list__item" id="efeae7d2_129"><p>테스트 케이스를 검증하는 과정을 통해서 구체적인 동작과 기능을 학습합니다.</p></li></ol></dd></dl><section class="chapter"><h2 id="efeae7d2_130" data-toc="efeae7d2_130"   >코드 작성</h2><p id="efeae7d2_131">학습하려는 라이브러리 : <a href="https://github.com/google/guava" id="efeae7d2_132"   data-external="true" rel="noopener noreferrer" >구아바</a></p><section class="chapter"><h3 id="efeae7d2_133" data-toc="efeae7d2_133"   >다이나믹 테스트 활용</h3><div class="code-block" data-lang="java"         >
+@DisplayName(&quot;멀티맵 기능 확인&quot;)
+@TestFactory
+Collection&lt;DynamicTest&gt; multiMapRunningRemove2(){
+    //given
+    Multimap&lt;String,String&gt; multimap = ArrayListMultimap.create();
+    String coffee = &quot;커피&quot;;
+    multimap.put(coffee, &quot;아메리카노&quot;);
+    multimap.put(coffee, &quot;카페라떼&quot;);
+    multimap.put(coffee, &quot;카푸치노&quot;);
+    multimap.put(&quot;베이커리&quot;,&quot;크루아싱&quot;);
+    multimap.put(&quot;베이커리&quot;,&quot;버터롤&quot;);
+
+    //when //then
+    return Arrays.asList(
+            dynamicTest(&quot;1개 value 삭제를 합니다&quot;,()-&gt;{
+                //when
+                multimap.remove(coffee,&quot;아메리카노&quot;);
+
+                //then
+                Collection&lt;String&gt; result = multimap.get(coffee);
+                Assertions.assertThat(result).hasSize(2)
+                        .contains(&quot;카푸치노&quot;,&quot;카페라떼&quot;);
+            }),
+            dynamicTest(&quot;1개 key 삭제&quot;,()-&gt;{
+                //when
+                multimap.removeAll(coffee);
+
+                //then
+                Collection&lt;String&gt; result = multimap.get(coffee);
+                Assertions.assertThat(result).isEmpty();
+            })
+    );
+}
+</div><p id="efeae7d2_135"><code class="code" id="efeae7d2_136">DynamicTest</code>는 테스트 환경을 공유하는 개별 테스트라고 생각하고 작성해야합니다.</p><p id="efeae7d2_137">아래와 같이 작성하는건 옳지 않습니다.</p><div class="code-block" data-lang="java"         >
+@DisplayName(&quot;멀티맵 - 데이터 삭제&quot;)
+@TestFactory
+Collection&lt;DynamicTest&gt; multiMapRunningRemove(){
+    //given
+    Multimap&lt;String,String&gt; multimap = ArrayListMultimap.create();
+    String coffee = &quot;커피&quot;;
+    multimap.put(coffee, &quot;아메리카노&quot;);
+    multimap.put(coffee, &quot;카페라떼&quot;);
+    multimap.put(coffee, &quot;카푸치노&quot;);
+    multimap.put(&quot;베이커리&quot;,&quot;크루아싱&quot;);
+    multimap.put(&quot;베이커리&quot;,&quot;버터롤&quot;);
+
+    //when //then
+    return Arrays.asList(
+            dynamicTest(&quot;멀티맵에 베이커리를 삭제합니다.&quot;,()-&gt;multimap.removeAll(&quot;베이커리&quot;)),
+            dynamicTest(&quot;멀티맵의 사이즈는 1입니다&quot;,()-&gt; Assertions.assertThat(multimap.size()).isEqualTo(3)),
+            dynamicTest(&quot;멀티맵에 아메리카노를 작세합니다.&quot;,()-&gt;multimap.remove(coffee,&quot;아메리카노&quot;)),
+            dynamicTest(&quot;멀티맵에 커피에는 카페라떼와 카푸치노가 있습니다.&quot;,()-&gt;{
+                Assertions.assertThat(multimap.get(coffee)).hasSize(2);
+            })
+    );
+}
+</div><dl id="efeae7d2_139" data-style="title-top"><dt id="efeae7d2_140" data-expandable="false">테스트 케이스 작성 목적</dt><dd><p id="efeae7d2_142">학습 테스트일지라도 테스트 코드는 목적이 있어야합니다.</p><ol class="list _decimal" id="efeae7d2_143" type="1"><li class="list__item" id="efeae7d2_144"><p>첫 번째 테스트는 데이터 삭제에 대한 테스트 케이스 하나로 작성했습니다.</p></li><li class="list__item" id="efeae7d2_145"><p>두 번째 테스트는 데이터 삭제에 대한 하나의 테스트 케이스를 <code class="code" id="efeae7d2_146">@DisPlayName</code>처럼 활용했습니다.</p></li></ol></dd></dl></section></section><section class="chapter"><h2 id="vs" data-toc="vs"   >영구적 vs 일회성</h2><p id="efeae7d2_147">학습 테스트가 장기적인 관점에서 같이 프로젝트를 하는 팀원들이 참고할만한 가치가 있다고 생각하면 남겨서 문서처럼 활용할 수 있습니다.</p><p id="efeae7d2_148">아니면 개인적인 흥미나 프로덕션 코드에 적용하기 위해서 빠르게 학습 테스트를 통해서 학습한 경우에는 <code class="code" id="efeae7d2_149">DisPlayName</code>등 신경써서 작성할 필요가 없고, 테스트 후 삭제해도 됩니다.</p><aside class="prompt" data-type="tip" data-title="" id="efeae7d2_150"><p id="efeae7d2_151">학습할 일이 있다면 테스트로 작성하는것을 권장합니다.</p></aside></section><div class="last-modified"> Last modified: 18 1월 2024</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom">  <a class="navigation-links__prev" href="appendix.html">Appendix</a>   <a class="navigation-links__next" href="02-api-문서-작성-도구.html">API 문서 작성 도구</a>  </div></article><div id="disqus_thread"></div></div></section></main></div>  <script src="https://resources.jetbrains.com/writerside/apidoc/6.6.6-b205/app.js"></script></body></html>
