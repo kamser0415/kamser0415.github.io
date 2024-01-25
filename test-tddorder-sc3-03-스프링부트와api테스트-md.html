@@ -1,0 +1,166 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat"><html lang="en-US" data-colors-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex">  <meta name="built-on" content="2024-01-25T19:03:56.8922244"><meta name="build-number" content="${buildNumber}">       <title>스프링 부트와 API Test | Study</title><script id="virtual-toc-data" type="application/json">[{"id":"spring","level":0,"title":"Spring","anchor":"#spring"},{"id":"846005d0_16","level":0,"title":"인수테스트","anchor":"#846005d0_16"},{"id":"red","level":0,"title":"RED","anchor":"#red"},{"id":"green","level":0,"title":"GREEN","anchor":"#green"},{"id":"846005d0_29","level":0,"title":"리팩토링","anchor":"#846005d0_29"},{"id":"846005d0_35","level":0,"title":"추가수정","anchor":"#846005d0_35"}]</script><script id="topic-shortcuts" type="application/json"></script><link href="https://resources.jetbrains.com/writerside/apidoc/6.6.6-b205/app.css" rel="stylesheet">   <link rel="apple-touch-icon" sizes="180x180" href="https://jetbrains.com/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="https://jetbrains.com/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="https://jetbrains.com/favicon-16x16.png"><link rel="manifest" href="https://jetbrains.com/site.webmanifest"><link rel="mask-icon" href="https://jetbrains.com/safari-pinned-tab.svg" color="#000000"><meta name="msapplication-TileColor" content="#000000"/><meta name="msapplication-TileImage" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-144x144.png"/><meta name="msapplication-square70x70logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-70x70.png"/><meta name="msapplication-square150x150logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-150x150.png"/><meta name="msapplication-wide310x150logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-310x150.png"/><meta name="msapplication-square310x310logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-310x310.png"/>  <meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="스프링 부트와 API Test | Study"/><meta property="og:description" content=""/><meta property="og:image" content=""/><meta property="og:site_name" content="Study Help"/><meta property="og:type" content="website"/><meta property="og:locale" content="en_US"/><meta property="og:url" content="/learning_cording/1.0/test-tddorder-sc3-03-스프링부트와api테스트-md.html"/><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="스프링 부트와 API Test | Study"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json"> { "@context": "http://schema.org", "@type": "WebPage", "@id": "/learning_cording/1.0/test-tddorder-sc3-03-스프링부트와api테스트-md.html#webpage", "url": "/learning_cording/1.0/test-tddorder-sc3-03-스프링부트와api테스트-md.html", "name": "스프링 부트와 API Test | Study", "description": "", "image": "", "inLanguage":"en-US" }</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json"> { "@type": "WebSite", "@id": "/learning_cording/#website", "url": "/learning_cording/", "name": "Study Help" }</script><!-- End Schema.org --></head>      <body data-id="test-tddorder-sc3-03-스프링부트와API테스트-md" data-main-title="스프링 부트와 API Test" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}"  data-template="article"  data-breadcrumbs="TestCode.md|TestCode///TDD-Order.md|TDD-Order"  >   <div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>Study 1.0 Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="test-tddorder-sc3-03-스프링부트와API테스트-md"   id="test-tddorder-sc3-03-스프링부트와API테스트-md.md">스프링 부트와 API Test</h1>  <section class="chapter"><h2 id="spring" data-toc="spring"   >Spring</h2><p id="846005d0_4">강사님과 강의를 보기전 작성한 코드 비교</p><div class="code-block" data-lang="java"         >
+@SpringBootTest
+public class ProductServiceWithBootTest {
+
+    @Autowired
+    private ProductService2 productService;
+
+@Test
+void 상품수정() {
+    //given
+    final long updateProductId = 1L;
+    final String updateName = &quot;수정된이름&quot;;
+    final int updatePrice = 2000;
+    final DiscountPolicy updateDisCountPolicy = DiscountPolicy.PERCENT_10;
+
+    final AddProductRequest productRequest = ProductSteps.createProductRequest();
+    productService.addProduct(productRequest);
+
+    //when
+    productService.updateProduct(updateProductId, new UpdateProductRequest(updateName, updatePrice, updateDisCountPolicy));
+
+    //then
+    final Product findProduct = productPort.getProduct(updateProductId);
+    Assertions.assertThat(findProduct).isNotNull()
+            .extracting(&quot;name&quot;,&quot;price&quot;,&quot;discountPolicy&quot;)
+            .contains(updateName,updatePrice,updateDisCountPolicy);
+}
+</div><dl id="846005d0_6" data-style="title-top"><dt id="846005d0_7" data-expandable="false">현재 코드 문제점</dt><dd><p id="846005d0_9">SpringBootTest &rarr; 인수 테스트로 넘어갈 때 콭드를 다시 작성해야합니다.</p></dd></dl><div class="code-block" data-lang="java"         >
+@Test
+void 상품수정() {
+    //given
+    final long updateProductId = 1L;
+    final String updateName = &quot;수정된이름&quot;;
+    final int updatePrice = 2000;
+    final DiscountPolicy updateDisCountPolicy = DiscountPolicy.PERCENT_10;
+
+    productService.addProduct(createProductRequest());
+
+    //when
+    //강사님 코드
+    productService.updateProduct(updateProductId, 수정요청객체());
+    //수정후 코드
+    productService.updateProduct(updateProductId, createUpdateProductRequest(updateName, updatePrice, updateDisCountPolicy));
+
+    //then
+    final ResponseEntity&lt;GetProductResponse&gt; findProduct = productService.getProduct(updateProductId);
+    Assertions.assertThat(findProduct.getBody()).isNotNull()
+            .extracting(&quot;name&quot;, &quot;price&quot;, &quot;discountPolicy&quot;)
+            .contains(updateName, updatePrice, updateDisCountPolicy);
+}
+</div><dl id="846005d0_11" data-style="title-top"><dt id="846005d0_12" data-expandable="false">강사님 코드 수정</dt><dd><p id="846005d0_14">인수 테스트라도 검증하는 부분할 때 어떤 값으로 수정을 요청했는지 알 수가 없고, 저 then이 맞는지 틀린지 검증을 확인을 하려면 <code class="code" id="846005d0_15">ProductSteps</code>라는 공통 유틸 클래스로 어떤 값이 저장되는지 확인해야합니다.</p></dd></dl></section><section class="chapter"><h2 id="846005d0_16" data-toc="846005d0_16"   >인수테스트</h2><p id="846005d0_17">API 인수테스트를 할 때, 검증부터 작성합니다. 필요한 검증에 대한 데이터를 저장하고 준비하기 때문에 불필요한 <code class="code" id="846005d0_18">Test Fixture</code>가 없어집니다.</p><p id="846005d0_19"><span class="control" id="846005d0_20">검증에 사용할 정보를 저장합니다.</span></p><div class="code-block" data-lang="java"         >
+@Test
+@DisplayName(&quot;상품 수정&quot;)
+void 상품수정() {
+    //given
+    
+    //when
+    
+    //then
+     var getResponse = RestAssured.given().log().all()
+                        .when().get(&quot;/products2/{productsId}&quot;,productId)
+                        .then().log().all()
+                        .extract();
+    
+    assertThat(updateResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
+    assertThat(getResponse.body().jsonPath().getString(&quot;name&quot;)).isEqualTo(updateName);
+    assertThat(getResponse.body().jsonPath().getInt(&quot;price&quot;)).isEqualTo(updatePrice);
+    assertThat(getResponse.body().jsonPath().getString(&quot;discountPolicy&quot;)).isEqualTo(updateDisCountPolicy.name());
+}
+</div><p id="846005d0_22"><span class="control" id="846005d0_23">when &rarr; given 작성</span></p><div class="code-block" data-lang="java"         >
+@Test
+@DisplayName(&quot;상품 수정&quot;)
+void 상품수정() {
+    //given
+    final long productId = 1L;
+    ProductSteps.requestCreateProduct(ProductSteps.createProductRequest());
+
+    final String updateName = &quot;변경된 이름&quot;;
+    final int updatePrice = 2000;
+    final DiscountPolicy updateDisCountPolicy = DiscountPolicy.NONE;
+
+    //when
+    var updateResponse = RestAssured
+            .given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(ProductSteps.createUpdateProductParam(updateName, updatePrice, updateDisCountPolicy))
+            .when()
+                .patch(&quot;/products2/{productId}&quot;, productId)
+            .then().log().all()
+                .extract();
+
+    //then
+    var getResponse = RestAssured.given().log().all()
+                    .when().get(&quot;/products2/{productsId}&quot;,productId)
+                    .then().log().all()
+                    .extract();
+
+    assertThat(updateResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
+    assertThat(getResponse.body().jsonPath().getString(&quot;name&quot;)).isEqualTo(updateName);
+    assertThat(getResponse.body().jsonPath().getInt(&quot;price&quot;)).isEqualTo(updatePrice);
+    assertThat(getResponse.body().jsonPath().getString(&quot;discountPolicy&quot;)).isEqualTo(updateDisCountPolicy.name());
+}
+</div></section><section class="chapter"><h2 id="red" data-toc="red"   >RED</h2><div class="code-block" data-lang="json"         >
+{
+    &quot;timestamp&quot;: &quot;2024-01-21T04:19:28.743+00:00&quot;,
+    &quot;status&quot;: 405,
+    &quot;error&quot;: &quot;Method Not Allowed&quot;,
+    &quot;path&quot;: &quot;/products2/1&quot;
+}
+</div><p id="846005d0_26">서비스 구현체가 아직 웹 매핑이 안되서 테스트에 실패합니다.</p></section><section class="chapter"><h2 id="green" data-toc="green"   >GREEN</h2><p id="846005d0_27">상품 수정 메서드를 매핑합니다.</p><div class="code-block" data-lang="java"         >
+@PatchMapping(&quot;/{productsId}&quot;)
+public ResponseEntity&lt;Void&gt; updateProduct(@PathVariable(&quot;productsId&quot;) final Long productId,@RequestBody final UpdateProductRequest updateProductRequest) {
+    //throw error
+    final Product product = productPort.getProduct(productId);
+    product.update(updateProductRequest.updateName(), updateProductRequest.updatePrice(), updateProductRequest.updateDisCountPolicy());
+    productPort.save(product);
+
+    return ResponseEntity.ok().build();
+}
+</div></section><section class="chapter"><h2 id="846005d0_29" data-toc="846005d0_29"   >리팩토링</h2><p id="846005d0_30">상품 수정 API를 <code class="code" id="846005d0_31">ProductSteps</code>에 저장하고, 나머지 API 요청도 모두 <code class="code" id="846005d0_32">static import</code>로 정리합니다.</p><div class="code-block" data-lang="java"         >
+@Test
+@DisplayName(&quot;상품 수정&quot;)
+void 상품수정() {
+    //given
+    final long productId = 1L;
+    requestCreateProduct(createProductRequest());
+
+    final String updateName = &quot;변경된 이름&quot;;
+    final int updatePrice = 2000;
+    final DiscountPolicy updateDisCountPolicy = DiscountPolicy.NONE;
+
+    //when
+    var updateResponse = requestUpdateProduct(updateName, updatePrice, updateDisCountPolicy, productId);
+
+    //then
+    var getResponse = 상품조회요청(productId);
+
+    assertThat(updateResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
+    assertThat(getResponse.body().jsonPath().getString(&quot;name&quot;)).isEqualTo(updateName);
+    assertThat(getResponse.body().jsonPath().getInt(&quot;price&quot;)).isEqualTo(updatePrice);
+    assertThat(getResponse.body().jsonPath().getString(&quot;discountPolicy&quot;)).isEqualTo(updateDisCountPolicy.name());
+}
+</div><p id="846005d0_34">강사님 코드와 다르지만, 인수 테스트를 할 때도 외부에서 어떤 값으로 요청하는지 테스트 코드만 봐도 확인할 수 있어야한다고 생각합니다.</p></section><section class="chapter"><h2 id="846005d0_35" data-toc="846005d0_35"   >추가수정</h2><div class="code-block" data-lang="java"         >
+@Test
+@DisplayName(&quot;상품 수정&quot;)
+void 상품수정() {
+    //given
+    final long productId = 1L;
+    requestCreateProduct(createProductRequest(&quot;상품명&quot;, 1000, DiscountPolicy.NONE));
+
+    final String updateName = &quot;변경된 이름&quot;;
+    final int updatePrice = 2000;
+    final DiscountPolicy updateDisCountPolicy = DiscountPolicy.NONE;
+
+    //when
+    var updateResponse = requestUpdateProduct(productId, createUpdateProductParam(updateName, updatePrice, updateDisCountPolicy));
+
+    //then
+    var getResponse = 상품조회요청(productId);
+
+    assertThat(updateResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
+    assertThat(getResponse.body().jsonPath().getString(&quot;name&quot;)).isEqualTo(updateName);
+    assertThat(getResponse.body().jsonPath().getInt(&quot;price&quot;)).isEqualTo(updatePrice);
+    assertThat(getResponse.body().jsonPath().getString(&quot;discountPolicy&quot;)).isEqualTo(updateDisCountPolicy.name());
+}
+</div></section><div class="last-modified"> Last modified: 25 1월 2024</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom">  <a class="navigation-links__prev" href="test-tddorder-sc3-01-pojo-상품-수정-기능-구현하기.html">상품 수정 기능 구현하기.</a>   <a class="navigation-links__next" href="test-tddorder-sc4-01-pojo-상품-주문-구현-md.html">응용 테스트 방법</a>  </div></article><div id="disqus_thread"></div></div></section></main></div>  <script src="https://resources.jetbrains.com/writerside/apidoc/6.6.6-b205/app.js"></script></body></html>

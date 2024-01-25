@@ -1,0 +1,77 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat"><html lang="en-US" data-colors-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex">  <meta name="built-on" content="2024-01-25T19:03:57.1019912"><meta name="build-number" content="${buildNumber}">       <title>테스트하기 어려운 영역을 분리하기 | Study</title><script id="virtual-toc-data" type="application/json">[{"id":"35816b2b_14","level":0,"title":"기존 방식 테스트 코드","anchor":"#35816b2b_14"},{"id":"localdatetime","level":0,"title":"LocalDateTime 주입받기","anchor":"#localdatetime"},{"id":"35816b2b_43","level":0,"title":"테스트하기 어려운 영역을 구분하고 분리하기","anchor":"#35816b2b_43"},{"id":"35816b2b_70","level":0,"title":"테스트 하기 좋은 코드(순수함수)","anchor":"#35816b2b_70"},{"id":"35816b2b_75","level":0,"title":"정리","anchor":"#35816b2b_75"}]</script><script id="topic-shortcuts" type="application/json"></script><link href="https://resources.jetbrains.com/writerside/apidoc/6.6.6-b205/app.css" rel="stylesheet">   <link rel="apple-touch-icon" sizes="180x180" href="https://jetbrains.com/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="https://jetbrains.com/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="https://jetbrains.com/favicon-16x16.png"><link rel="manifest" href="https://jetbrains.com/site.webmanifest"><link rel="mask-icon" href="https://jetbrains.com/safari-pinned-tab.svg" color="#000000"><meta name="msapplication-TileColor" content="#000000"/><meta name="msapplication-TileImage" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-144x144.png"/><meta name="msapplication-square70x70logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-70x70.png"/><meta name="msapplication-square150x150logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-150x150.png"/><meta name="msapplication-wide310x150logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-310x150.png"/><meta name="msapplication-square310x310logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-310x310.png"/>  <meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="테스트하기 어려운 영역을 분리하기 | Study"/><meta property="og:description" content=""/><meta property="og:image" content=""/><meta property="og:site_name" content="Study Help"/><meta property="og:type" content="website"/><meta property="og:locale" content="en_US"/><meta property="og:url" content="/learning_cording/1.0/중요-테스트하기-어려운-영역을-분리하기1.html"/><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="테스트하기 어려운 영역을 분리하기 | Study"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json"> { "@context": "http://schema.org", "@type": "WebPage", "@id": "/learning_cording/1.0/중요-테스트하기-어려운-영역을-분리하기1.html#webpage", "url": "/learning_cording/1.0/중요-테스트하기-어려운-영역을-분리하기1.html", "name": "테스트하기 어려운 영역을 분리하기 | Study", "description": "", "image": "", "inLanguage":"en-US" }</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json"> { "@type": "WebSite", "@id": "/learning_cording/#website", "url": "/learning_cording/", "name": "Study Help" }</script><!-- End Schema.org --></head>      <body data-id="중요-테스트하기-어려운-영역을-분리하기1" data-main-title="테스트하기 어려운 영역을 분리하기" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}"  data-template="article"  data-breadcrumbs="TestCode.md|TestCode///Practical-Testing.md|Practical-Testing///단위테스트2.md|단위테스트2"  >   <div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>Study 1.0 Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="중요-테스트하기-어려운-영역을-분리하기1"   id="중요-테스트하기-어려운-영역을-분리하기1.md">테스트하기 어려운 영역을 분리하기</h1>  <aside class="prompt" data-type="warning" data-title="" id="35816b2b_4"><p id="35816b2b_5">제일 중요한 파트</p></aside><dl id="35816b2b_6" data-style="title-top"><dt id="35816b2b_7" data-expandable="false">요구사항 추가</dt><dd><ul class="list _ul" id="35816b2b_9"><li class="list__item" id="35816b2b_10"><p>가게 운영 시간( 10:00~22:00 ) 외에는 주문을 생성할 수 없다.</p></li></ul></dd><dt id="35816b2b_11" data-expandable="false">제약조건 추가</dt><dd><p id="35816b2b_13">현재시간이 운영시간이 아닐경우 주문을 할수가 없다.</p></dd></dl><section class="chapter"><h2 id="35816b2b_14" data-toc="35816b2b_14"   >기존 방식 테스트 코드</h2><section class="chapter"><h3 id="35816b2b_15" data-toc="35816b2b_15"   >요구사항 추가 비즈니스 코드</h3><div class="code-block" data-lang="java"         >
+public class CafeKiosk {
+
+    private static final LocalTime CAFE_OPEN_TIME = LocalTime.of(10, 0);
+    private static final LocalTime CAFE_CLOSE_TIME = LocalTime.of(22, 0);
+    
+    public Order createOrder() {
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        LocalTime currentTime = currentDateTime.toLocalTime();
+        if(currentTime.isBefore(CAFE_OPEN_TIME) || currentTime.isAfter(CAFE_CLOSE_TIME)){
+            throw new IllegalStateException(&quot;주문은 10시부터 22시까지 가능합니다.&quot;);
+        }
+        
+        return new Order(currentDateTime, beverage);
+    }
+}
+</div></section><section class="chapter"><h3 id="35816b2b_17" data-toc="35816b2b_17"   >테스트 코드</h3><div class="code-block" data-lang="java"         >
+@Test
+void createOrder(){
+    //given
+    CafeKiosk cafeKiosk = new CafeKiosk();
+    cafeKiosk.add(new Americano(), 2);
+
+    //when
+    Order beverage = cafeKiosk.createOrder();
+
+    //then
+    Assertions.assertThat(beverage.getBeverages()).hasSize(2);
+    Assertions.assertThat(beverage.getBeverages().get(0).getName()).isEqualTo(&quot;아메리카노&quot;);
+}
+</div><p id="35816b2b_19">현재 테스트 코드는 <code class="code" id="35816b2b_20">createOrder()</code>를 실행할 때마다 변경되는 <code class="code" id="35816b2b_21">LocalDataTime.now()</code>에 따라 결정 됩니다.</p><p id="35816b2b_22"><code class="code" id="35816b2b_23">LocalDateTime</code>을 <code class="code" id="35816b2b_24">DI</code>를 통해서 주입을 하면 테스트할 때 변경이 가능합니다.</p></section></section><section class="chapter"><h2 id="localdatetime" data-toc="localdatetime"   >LocalDateTime 주입받기</h2><section class="chapter"><h3 id="35816b2b_25" data-toc="35816b2b_25"   >비즈니스 로직 수정</h3><ul class="list _ul" id="35816b2b_26"><li class="list__item" id="35816b2b_27"><p id="35816b2b_28">비즈니스 로직</p><div class="code-block" data-lang="java"         >
+public Order createOrder(LocalDateTime currentDateTime) {
+    LocalTime currentTime = currentDateTime.toLocalTime();
+    if(currentTime.isBefore(CAFE_OPEN_TIME) || currentTime.isAfter(CAFE_CLOSE_TIME)){
+        throw new IllegalStateException(&quot;주문은 10시부터 22시까지 가능합니다.&quot;);
+    }
+    return new Order(currentDateTime, beverage);
+}
+</div></li><li class="list__item" id="35816b2b_30"><p id="35816b2b_31">프로덕션 코드</p><div class="code-block" data-lang="java"         >
+cafeKiosk.createOrder(LocalDateTime.now());
+</div></li></ul></section><section class="chapter"><h3 id="35816b2b_33" data-toc="35816b2b_33"   >테스트 코드</h3><ul class="list _ul" id="35816b2b_34"><li class="list__item" id="35816b2b_35"><p id="35816b2b_36">해피케이스</p><div class="code-block" data-lang="java"         >
+@Test
+void createOrderWithOpenTime(){
+    //given
+    CafeKiosk cafeKiosk = new CafeKiosk();
+    cafeKiosk.add(new Americano(), 2);
+
+    //when
+    LocalDateTime openTime = LocalDateTime.of(2024, 1, 1, 10, 0, 0);
+    Order beverage = cafeKiosk.createOrder(openTime);
+
+    //then
+    Assertions.assertThat(beverage.getBeverages()).hasSize(2);
+    Assertions.assertThat(beverage.getBeverages().get(0).getName()).isEqualTo(&quot;아메리카노&quot;);
+}
+</div></li><li class="list__item" id="35816b2b_38"><p id="35816b2b_39">예외케이스(<code class="code" id="35816b2b_40">경계값</code>)</p><div class="code-block" data-lang="java"         >
+@Test
+ void createOrderWithoutOpenTime(){
+     //given
+     CafeKiosk cafeKiosk = new CafeKiosk();
+     cafeKiosk.add(new Americano(), 2);
+
+     //when
+     LocalDateTime notOpenTime = LocalDateTime.of(2024, 1, 1, 9, 59, 5);
+
+     //then
+     Assertions.assertThatThrownBy(() -&gt; cafeKiosk.createOrder(notOpenTime))
+             .isInstanceOf(IllegalStateException.class)
+             .hasMessage(&quot;주문은 10시부터 22시까지 가능합니다.&quot;);
+ }
+</div></li></ul><div class="code-block" data-lang="java"         >
+//실제 비지니스 로직
+public Order createOrder(LocalDateTime.now())
+
+//테스트 코드 작성을 위해 메서드 추가
+public Order createOrder(LocalDateTime currentDateTime)
+</div></section></section><section class="chapter"><h2 id="35816b2b_43" data-toc="35816b2b_43"   >테스트하기 어려운 영역을 구분하고 분리하기</h2><p id="35816b2b_44">테스트 가능한 코드가 있을때 현재 시간등 제약 조건이 있어 테스트가 어려운 코드가 생겼다면 전체가 테스트가 어려워집니다. 테스트를 수행할때마다 테스트 결과값이 달라집니다.</p><p id="35816b2b_45">다음 조치로 테스트 영역을 외부로 분리를 했다.</p><figure  id="35816b2b_46"><img alt="image_17.png" src="images/image_1.png" title="image_17.png"  width="500" height="274"></figure><p id="35816b2b_47">외부에 받도록 해서 실제 프로덕트 코드에는 주입을 해주고 기능을 동작하도록 하고 테스트코드에서는 원하는 값을 넣어서 테스트를 했다. 우리가 원하는건 <code class="code" id="35816b2b_48">LocalDateTime.now()</code>의 시간을 확인하는게 아니라,</p><p id="35816b2b_49">테스트 하고자 하는 영역은 어떤 시간이 주어졌을 때 시간 범위안에 시각을 가지고 결과값을 판단하는게 목적이다. 테스트 코드 상에서 원하는 값을 넣을수 있도록 설계를 변경하는게 엄청 중요하다.</p><p id="35816b2b_50">테스트 하기 어려운 영역을 외부로 분리를 하면 계속 외부에서 분리를 할수 있게 된다. 상단으로 올라갈수록 테스트가 가능한 코드는 많아진다.</p><ul class="list _ul" id="35816b2b_51"><li class="list__item" id="35816b2b_52"><p>저 빨간색 영역이 멈추는 영역이 생긴다.</p></li></ul><p id="35816b2b_53">그 영역부터는 테스트를 하기 어려운 영역으로 변경이 된다. 어느 외부 계층까지 분리를 해야하나요 ? 가장 상단으로 올려야하는 건가?</p><section class="chapter"><h3 id="35816b2b_54" data-toc="35816b2b_54"   >어떤 영역이 테스트하기 어려운 영역인가?</h3><dl id="35816b2b_55" data-style="title-top"><dt id="35816b2b_56" data-expandable="false">관측할 때마다 다른 값에 의존하는 코드</dt><dd><ul class="list _ul" id="35816b2b_58"><li class="list__item" id="35816b2b_59"><p>현재 날짜/시간, 랜덤 값, 전역 변수/함수, 사용자 입력 등</p><br><p> 전역 변수/함수는 다른 곳에서도 변경을 할수 있기 때문입니다. 사용자가 값을 입력할때마다 테스트 결과가 달라진다.</p></li></ul></dd><dt id="35816b2b_61" data-expandable="false">외부 세계에 영향을 주는 코드</dt><dd><ul class="list _ul" id="35816b2b_63"><li class="list__item" id="35816b2b_64"><p>표준 출력, 메세지 발송, 데이터베이스에 기록하기 등</p><br><p> log,e-mail전송,파일에 값을 기록할때 외부세계에서 값이 들어오고 함수가 그 외부 값에 의존하고 있을때 테스트하기가 어렵고, 제어를 할수없다.</p></li></ul></dd></dl><figure  id="35816b2b_66"><img alt="image_21.png" src="images/image_2.png" title="image_21.png"  width="600" height="233"></figure><ul class="list _ul" id="35816b2b_67"><li class="list__item" id="35816b2b_68"><p>어떤 함수가 있을 때 관측할 때마다 외부 세계를 의존하는 경우 그 값을 제어할 수가 없습니다.</p></li><li class="list__item" id="35816b2b_69"><p>함수의 결과가 외부 세계에 영향을 주고 있고, 다른 함수가 영향을 받는다면 테스트하기 어려운 함수입니다.</p></li></ul></section></section><section class="chapter"><h2 id="35816b2b_70" data-toc="35816b2b_70"   >테스트 하기 좋은 코드(순수함수)</h2><ul class="list _ul" id="35816b2b_71"><li class="list__item" id="35816b2b_72"><p>외부 세계와 단절된 함수</p></li><li class="list__item" id="35816b2b_73"><p>같은 입력에는 항상 같은 결과</p></li><li class="list__item" id="35816b2b_74"><p>테스트하기 쉬운 코드</p></li></ul></section><section class="chapter"><h2 id="35816b2b_75" data-toc="35816b2b_75"   >정리</h2><p id="35816b2b_76">단위 테스트시 외부 세계의 값을 의존하거나 영향을 주어서 테스트 마다 결과가 달라진다면 테스트를 제어할 수가 없고 테스트 코드 자체를 작성하기도 어려워 집니다. <br> 그런 경우 외부로 분리를 하여 <span class="control" id="35816b2b_78">제어할 수 있는 환경</span>으로 만드는걸 고민해야합니다.</p></section><div class="last-modified"> Last modified: 25 1월 2024</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom">  <a class="navigation-links__prev" href="테스트케이스세분화하기1.html">테스트 케이스 세분화하기</a>   <a class="navigation-links__next" href="키워드정리1.html">키워드정리</a>  </div></article><div id="disqus_thread"></div></div></section></main></div>  <script src="https://resources.jetbrains.com/writerside/apidoc/6.6.6-b205/app.js"></script></body></html>

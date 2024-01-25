@@ -1,0 +1,38 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat"><html lang="en-US" data-colors-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex">  <meta name="built-on" content="2024-01-25T19:03:56.9126525"><meta name="build-number" content="${buildNumber}">       <title>@DynamicTest | Study</title><script id="virtual-toc-data" type="application/json">[{"id":"e13fbe6d_7","level":0,"title":"목적","anchor":"#e13fbe6d_7"},{"id":"e13fbe6d_16","level":0,"title":"주의사항","anchor":"#e13fbe6d_16"},{"id":"e13fbe6d_20","level":0,"title":"문법","anchor":"#e13fbe6d_20"},{"id":"e13fbe6d_22","level":0,"title":"예제","anchor":"#e13fbe6d_22"}]</script><script id="topic-shortcuts" type="application/json"></script><link href="https://resources.jetbrains.com/writerside/apidoc/6.6.6-b205/app.css" rel="stylesheet">   <link rel="apple-touch-icon" sizes="180x180" href="https://jetbrains.com/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="https://jetbrains.com/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="https://jetbrains.com/favicon-16x16.png"><link rel="manifest" href="https://jetbrains.com/site.webmanifest"><link rel="mask-icon" href="https://jetbrains.com/safari-pinned-tab.svg" color="#000000"><meta name="msapplication-TileColor" content="#000000"/><meta name="msapplication-TileImage" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-144x144.png"/><meta name="msapplication-square70x70logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-70x70.png"/><meta name="msapplication-square150x150logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-150x150.png"/><meta name="msapplication-wide310x150logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-310x150.png"/><meta name="msapplication-square310x310logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-310x310.png"/>  <meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="@DynamicTest | Study"/><meta property="og:description" content=""/><meta property="og:image" content=""/><meta property="og:site_name" content="Study Help"/><meta property="og:type" content="website"/><meta property="og:locale" content="en_US"/><meta property="og:url" content="/learning_cording/1.0/dynamictest1.html"/><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="@DynamicTest | Study"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json"> { "@context": "http://schema.org", "@type": "WebPage", "@id": "/learning_cording/1.0/dynamictest1.html#webpage", "url": "/learning_cording/1.0/dynamictest1.html", "name": "@DynamicTest | Study", "description": "", "image": "", "inLanguage":"en-US" }</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json"> { "@type": "WebSite", "@id": "/learning_cording/#website", "url": "/learning_cording/", "name": "Study Help" }</script><!-- End Schema.org --></head>      <body data-id="DynamicTest1" data-main-title="@DynamicTest" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}"  data-template="article"  data-breadcrumbs="TestCode.md|TestCode///Practical-Testing.md|Practical-Testing"  >   <div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>Study 1.0 Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="DynamicTest1"   id="DynamicTest1.md">@DynamicTest</h1>  <p id="e13fbe6d_4"><a href="https://junit.org/junit5/docs/current/user-guide/#writing-tests-dynamic-tests" id="e13fbe6d_5"   data-external="true" rel="noopener noreferrer" >2.18. Dynamic Tests</a></p><p id="e13fbe6d_6">공유 변수를 여러 테스트가 공유를 하게 되면 테스트 끼리 강결합이 생기게 되고 테스트 순서가 중요해지는 상황이 발생하고 독립성도 보장되지 않습니다.</p><section class="chapter"><h2 id="e13fbe6d_7" data-toc="e13fbe6d_7"   >목적</h2><dl id="e13fbe6d_8" data-style="title-top"><dt id="e13fbe6d_9" data-expandable="false">DynamicTest의 목적</dt><dd><p id="e13fbe6d_11">하나의 환경을 설정해놓고 사용자 시나리오를 테스트</p><ul class="list _ul" id="e13fbe6d_12"><li class="list__item" id="e13fbe6d_13"><p>환경을 설정해놓고 이 환경에 <span class="control" id="e13fbe6d_14">변화</span>를 주면서 <span class="control" id="e13fbe6d_15">중간 중간 검증</span>을 하고 이런 행위를 했을때 이런 검증을 하고 일련의 시나리오를 테스트 하고 싶을때가 있는데 그럴때 사용하기 좋은게 이 어노테이션입니다.</p></li></ul></dd></dl></section><section class="chapter"><h2 id="e13fbe6d_16" data-toc="e13fbe6d_16"   >주의사항</h2><aside class="prompt" data-type="warning" data-title="" id="e13fbe6d_17"><p id="e13fbe6d_18">Dynamic Test Lifecycle: <br> @BeforeEach 및 @AfterEach 메서드 및 해당하는 확장 콜백은 @TestFactory 메서드 자체에 대해서만 실행되고, 개별 동적 테스트에 대해서는 실행되지 않습니다.</p></aside></section><section class="chapter"><h2 id="e13fbe6d_20" data-toc="e13fbe6d_20"   >문법</h2><div class="code-block" data-lang="java"         >
+@TestFactory
+Collection&lt;DynamicTest&gt; dynamicTestsFromCollection() {
+    return Arrays.asList(
+        dynamicTest(&quot;1st dynamic test&quot;, () -&gt; assertTrue(isPalindrome(&quot;madam&quot;))),
+        dynamicTest(&quot;2nd dynamic test&quot;, () -&gt; assertEquals(4, calculator.multiply(2, 2)))
+    );
+}
+</div></section><section class="chapter"><h2 id="e13fbe6d_22" data-toc="e13fbe6d_22"   >예제</h2><div class="code-block" data-lang="java"         >
+@DisplayName(&quot;재고 차감 시나리오&quot;)
+@TestFactory
+Collection&lt;DynamicTest&gt; stockDeductionDynamicTest(){
+    //given
+    Stock stock = Stock.create(&quot;001&quot;,1);
+
+    return List.of(
+        DynamicTest.dynamicTest(&quot;재고를 주어진 개수만큼 차감할 수 있다.&quot;,()-&gt;{
+            //given
+            int quantity = 1;
+
+            //when
+            stock.deductQuantity(quantity);
+
+            //then
+            assertThat(stock.getQuantity()).isZero();
+        }),
+        DynamicTest.dynamicTest(&quot;재고보다 많은 수의 수량으로 차감 시도하는 경우 예외가 발생한다.&quot;,()-&gt;{
+            //given
+            int quantity = 1;
+
+            //when //then
+            assertThatThrownBy(()-&gt;stock.deductQuantity(quantity))
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessage(&quot;차감할 재고 수량이 없습니다.&quot;);
+        })
+    );
+}
+</div></section><div class="last-modified"> Last modified: 25 1월 2024</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom">  <a class="navigation-links__prev" href="classicist-vs-mockist1.html">Classicist Vs Mockist</a>   <a class="navigation-links__next" href="final1.html">정리 및 기타 정보</a>  </div></article><div id="disqus_thread"></div></div></section></main></div>  <script src="https://resources.jetbrains.com/writerside/apidoc/6.6.6-b205/app.js"></script></body></html>
