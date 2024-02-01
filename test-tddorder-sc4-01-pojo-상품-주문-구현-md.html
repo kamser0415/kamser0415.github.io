@@ -1,0 +1,326 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-colors-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2024-02-01T21:56:31.8313091"><title>응용 테스트 방법 | Study</title><script type="application/json" id="virtual-toc-data">[{"id":"red","level":0,"title":"RED","anchor":"#red"},{"id":"1a3d4b87_24","level":0,"title":"주문 생성 작성","anchor":"#1a3d4b87_24"},{"id":"pojo","level":0,"title":"강사님 전체 POJO 코드","anchor":"#pojo"},{"id":"1a3d4b87_43","level":0,"title":"정리","anchor":"#1a3d4b87_43"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="https://resources.jetbrains.com/writerside/apidoc/6.6.6-b205/app.css" rel="stylesheet"><link rel="apple-touch-icon" sizes="180x180" href="https://jetbrains.com/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="https://jetbrains.com/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="https://jetbrains.com/favicon-16x16.png"><link rel="manifest" href="site.webmanifest"><meta name="msapplication-TileColor" content="#000000"><meta name="msapplication-TileImage" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-144x144.png"><meta name="msapplication-square70x70logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-70x70.png"><meta name="msapplication-square150x150logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-150x150.png"><meta name="msapplication-wide310x150logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-310x150.png"><meta name="msapplication-square310x310logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-310x310.png"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="응용 테스트 방법 | Study"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="Study Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="/learning_cording/1.0/test-tddorder-sc4-01-pojo-상품-주문-구현-md.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="응용 테스트 방법 | Study"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "/learning_cording/1.0/test-tddorder-sc4-01-pojo-상품-주문-구현-md.html#webpage",
+    "url": "/learning_cording/1.0/test-tddorder-sc4-01-pojo-상품-주문-구현-md.html",
+    "name": "응용 테스트 방법 | Study",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "/learning_cording/#website",
+    "url": "/learning_cording/",
+    "name": "Study Help"
+}</script><!-- End Schema.org --></head><body data-id="test-tddorder-sc4-01-POJO-상품-주문-구현-md" data-main-title="응용 테스트 방법" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="TestCode.md|TestCode///TDD-Order.md|TDD-Order"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>Study 1.0 Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="test-tddorder-sc4-01-POJO-상품-주문-구현-md" id="test-tddorder-sc4-01-POJO-상품-주문-구현-md.md">응용 테스트 방법</h1><section class="chapter"><h2 id="red" data-toc="red">RED</h2><p id="1a3d4b87_2">테스트 코드를 먼저 작성합니다.</p><div class="code-block" data-lang="java">
+@Test
+void 상품주문(){
+
+    final Long productId = 1L;
+    final int quantity = 2; //이미 주문하고 있다.
+
+    final CreateOrderRequest request = new CreateOrderRequest(productId,quantity);
+    orderService.createOrder(request);
+    
+}
+</div><aside class="prompt" data-type="tip" data-title="" id="1a3d4b87_4"><p id="1a3d4b87_5"><code class="code" id="1a3d4b87_6">orderService.createOrder(request);</code>부터 작성하여 시작합니다.</p></aside><p id="1a3d4b87_7">클라이언트는 주문 인터페이스를 사용하기 위해서 상품의 고유번호, 주문 수량을 서비스에게 전달하면 주문 서비스는 주문을 생성합니다.</p><ul class="list _ul" id="1a3d4b87_8"><li class="list__item" id="1a3d4b87_9"><p>request를 이너 클래스로 생성</p></li><li class="list__item" id="1a3d4b87_10"><p>orderService를 이너 클래스로 생성</p></li><li class="list__item" id="1a3d4b87_11"><p>orderService.createOrder 매서드 생성 후 테스트 실행</p></li><li class="list__item" id="1a3d4b87_12"><p><span class="control" id="1a3d4b87_13">RED 발생</span></p></li></ul><section class="chapter"><h3 id="1a3d4b87_14" data-toc="1a3d4b87_14">전체 코드</h3><div class="code-block" data-lang="java">
+public class OrderServiceTest {
+    private OrderService orderService;
+
+    @BeforeEach
+    void setUp(){
+        orderService = new OrderService();
+    }
+
+    private class OrderService {
+        public void createOrder(final CreateOrderRequest request) {
+            throw new RuntimeException(&quot;아직 구현되지 않았습니다.&quot;);
+        }
+    }
+
+    @Test
+    void 상품주문(){
+
+        final Long productId = 1L;
+        final int quantity = 2; //이미 주문하고 있다.
+
+        final CreateOrderRequest request = new CreateOrderRequest(productId,quantity);
+        orderService.createOrder(request);
+        
+    }
+    
+    private record CreateOrderRequest(Long productId, int quantity) {
+
+        private CreateOrderRequest {
+            Assert.notNull(productId, &quot;상품 ID는 필수입니다.&quot;);
+            Assert.isTrue(quantity &gt; 0, &quot;수량은 0보다 커야합니다.&quot;);
+        }
+    }
+}
+</div><dl id="1a3d4b87_16" data-style="title-top"><dt id="1a3d4b87_17" data-expandable="false">OrderService.createOrder</dt><dd><p id="1a3d4b87_19">내부 순서</p><ol class="list _decimal" id="1a3d4b87_20" type="1"><li class="list__item" id="1a3d4b87_21"><p>포트에게 해당 번호의 상품을 가져오라고 합니다</p></li><li class="list__item" id="1a3d4b87_22"><p>해당 상품으로 오더를 만듭니다.</p></li><li class="list__item" id="1a3d4b87_23"><p>포트에게 오더를 저장하라고 합니다.</p></li></ol></dd></dl></section></section><section class="chapter"><h2 id="1a3d4b87_24" data-toc="1a3d4b87_24">주문 생성 작성</h2><div class="code-block" data-lang="java">
+private class OrderService {
+    public void createOrder(final CreateOrderRequest request) {
+        //상품 조회
+        //== 강사님
+        //orderPort.getProductById(request.productId());
+        
+        productPort.getProduct(request.productId());
+        //오더 생성
+        final Order order = new Order(request.productId(), request.quantity());
+        //오더 저장
+        orderPort.save(order);
+    }
+}
+</div><dl id="1a3d4b87_26" data-style="title-top"><dt id="1a3d4b87_27" data-expandable="false">ProductPort 의존할 경우</dt><dd><ol class="list _decimal" id="1a3d4b87_29" type="1"><li class="list__item" id="1a3d4b87_30"><p>OrderService가 ProductPort를 의존하려면 ProductPort는 <code class="code" id="1a3d4b87_31">public</code> 접근제어자를 가져야한다.</p></li><li class="list__item" id="1a3d4b87_32"><p>ProductPort를 의존함으로 해당 포트가 가진 메서드만 Stubing하여 테스트 코드가 간결해진다.</p></li><li class="list__item" id="1a3d4b87_33"><p>package-private이 깨지게 되어 접근 범위가 넓어진다.</p></li></ol></dd><dt id="1a3d4b87_34" data-expandable="false">OrderPort로 다 해결할 경우</dt><dd><ol class="list _decimal" id="1a3d4b87_36" type="1"><li class="list__item" id="1a3d4b87_37"><p>ProductPort를 의존하지 않기 때문에 같은 패키지내에서 package-private이 보장된다.</p></li><li class="list__item" id="1a3d4b87_38"><p>OrderPort와 ProductPort와 중복되는 코드가 발생한다.</p></li></ol></dd></dl><aside class="prompt" data-type="tip" data-title="" id="1a3d4b87_39"><p id="1a3d4b87_40">강의와 다르게 productPort를 의존하도록 해보겠습니다.</p></aside><div class="code-block" data-lang="java">
+public class OrderServiceTest {
+
+    private OrderService orderService;
+    private ProductPort productPort;
+    private OrderPort orderPort;
+    private OrderRepository orderRepository;
+
+    @BeforeEach
+    void setUp(){
+        productPort = new StubProductPort();
+        orderRepository = new OrderRepository();
+        orderPort = new OrderAdapter(orderRepository);
+        orderService = new OrderService(productPort, orderPort);
+    }
+
+    private static class StubProductPort implements ProductPort {
+        @Override
+        public void save(final Product product) {}
+        @Override
+        public Product getProduct(final Long productId) {
+            return new Product(&quot;상품명&quot;, 1000, DiscountPolicy.NONE);
+        }
+    }
+
+    private static class OrderAdapter implements OrderPort {
+
+        private final OrderRepository orderRepository;
+
+        private OrderAdapter(OrderRepository orderRepository) {
+            this.orderRepository = orderRepository;
+        }
+
+        @Override
+        public Long save(final Order order) {
+            return orderRepository.save(order);
+        }
+    }
+
+    private static class OrderRepository {
+        private Long sequence = 0L;
+        private final Map&lt;Long, Order&gt; persistence = new HashMap&lt;&gt;();
+
+        public Long save(final Order order) {
+            order.assignId(++sequence);
+            persistence.put(order.getId(), order);
+            return order.getId();
+        }
+    }
+
+    private class OrderService {
+
+        private final ProductPort productPort;
+        private final OrderPort orderPort;
+
+        private OrderService(ProductPort productPort, OrderPort orderPort) {
+            this.productPort = productPort;
+            this.orderPort = orderPort;
+        }
+
+        public Long createOrder(final CreateOrderRequest request) {
+            //상품 조회
+            final Product product = productPort.getProduct(request.productId());
+
+            //오더 생성
+            final Order order = new Order(product, request.quantity());
+
+            //오더 저장
+            return orderPort.save(order);
+        }
+    }
+
+    @Test
+    @DisplayName(&quot;주문생성&quot;)
+    void 주문생성(){
+        //given
+        final Long productId = 1L;
+        final int quantity = 2;
+        final CreateOrderRequest request = new CreateOrderRequest(productId,quantity);
+
+        //when
+        Long orderid = orderService.createOrder(request);
+
+        //then
+        assertThat(orderid).isEqualTo(1L);
+    }
+    
+    private record CreateOrderRequest(Long productId, int quantity) {
+        private CreateOrderRequest {
+            //validation
+            Assert.notNull(productId, &quot;상품 ID는 필수입니다.&quot;);
+            Assert.isTrue(quantity &gt; 0, &quot;상품 수량은 0보다 커야합니다.&quot;);
+        }
+
+    }
+
+    private static class Order {
+
+        private final Product productId;
+        private final int quantity;
+        private Long id;
+
+        public Order(final Product productId, final int quantity) {
+            //도메인 검증
+            Assert.notNull(productId, &quot;상품 ID는 필수입니다.&quot;);
+            Assert.isTrue(quantity &gt; 0, &quot;상품 수량은 0보다 커야합니다.&quot;);
+
+            this.productId = productId;
+            this.quantity = quantity;
+        }
+
+        public void assignId(final Long orderId) {
+            this.id = orderId;
+        }
+
+        public Long getId() {
+            return id;
+        }
+    }
+
+    private interface OrderPort {
+        Long save(Order order);
+    }
+}
+</div></section><section class="chapter"><h2 id="pojo" data-toc="pojo">강사님 전체 POJO 코드</h2><div class="code-block" data-lang="java">
+public class OrderServiceTest {
+    private OrderService orderService;
+    private OrderPort orderPort;
+
+    private OrderRepository orderRepository;
+    //클라이언트 입장에서 TDD 시작합니다.
+
+    @BeforeEach
+    void setUp() {
+        orderRepository = new OrderRepository();
+
+
+        //구현된 어댑터를 사용하면 JpaRepository 의 메서드를 구현해야하기 때문입니다.
+        orderPort = new OrderPort() {
+            @Override
+            public Product getProductById(final Long productId) {
+                return new Product(&quot;상품&quot;, 1000, DiscountPolicy.NONE);
+            }
+
+            @Override
+            public void save(final Order order) {
+                orderRepository.save(order);
+            }
+        };
+        orderService = new OrderService(orderPort);
+    }
+
+    private class OrderService {
+        private final OrderPort orderPort;
+
+        private OrderService(OrderPort orderPort) {
+            this.orderPort = orderPort;
+        }
+
+        public void createOrder(final CreateOrderRequest request) {
+            // 상품 조회
+            Product product = orderPort.getProductById(request.productId());
+            
+            // 오더 생성
+            final Order order = new Order(product, request.quantity());
+
+            // 오더 저장
+            orderPort.save(order);
+        }
+    }
+
+    @Test
+    void 상품주문() {
+
+        final Long productId = 1L;
+        final int quantity = 2; //이미 주문하고 있다.
+
+        final CreateOrderRequest request = new CreateOrderRequest(productId, quantity);
+        orderService.createOrder(request);
+    }
+
+    private record CreateOrderRequest(Long productId, int quantity) {
+
+        private CreateOrderRequest {
+            Assert.notNull(productId, &quot;상품 ID는 필수입니다.&quot;);
+            Assert.isTrue(quantity &gt; 0, &quot;수량은 0보다 커야합니다.&quot;);
+        }
+    }
+
+    private interface OrderPort {
+        Product getProductById(Long productId);
+
+        void save(Order order);
+    }
+
+    private class Order {
+        private final Long productId;
+        private final int quantity;
+        private Long id;
+
+        public Order(final Long productId, final int quantity) {
+            //validation
+            Assert.notNull(productId, &quot;상품 ID는 필수입니다.&quot;);
+            Assert.isTrue(quantity &gt; 0, &quot;수량은 0보다 커야합니다.&quot;);
+
+            this.productId = productId;
+            this.quantity = quantity;
+        }
+
+        public void assignId(final Long productId) {
+            this.id = productId;
+        }
+
+        public Long getId() {
+            return id;
+        }
+
+    }
+
+    private class OrderAdapter implements OrderPort {
+
+        private final ProductRepository productRepository;
+        private final OrderRepository orderRepository;
+
+        private OrderAdapter(ProductRepository productRepository, OrderRepository orderRepository) {
+            this.productRepository = productRepository;
+            this.orderRepository = orderRepository;
+        }
+
+        @Override
+        public Product getProductById(final Long productId) {
+            return productRepository.findById(productId).orElseThrow(
+                    () -&gt; new IllegalArgumentException(&quot;상품이 존재하지 않습니다.&quot;));
+        }
+
+        @Override
+        public void save(final Order order) {
+            orderRepository.save(order);
+        }
+    }
+
+    private class OrderRepository {
+        private Long sequence = 0L;
+        private Map&lt;Long, Order&gt; persistence = new HashMap&lt;&gt;();
+
+        public void save(final Order order) {
+            order.assignId(++sequence);
+            persistence.put(order.getId(),order);
+        }
+    }
+}
+</div></section><section class="chapter"><h2 id="1a3d4b87_43" data-toc="1a3d4b87_43">정리</h2><p id="1a3d4b87_44">테스트 코드를 먼저 작성하다보니 데이터를 저장한 다음 제대로 저장했는지 확인하려면 테스트 코드에서 Port,Service,Repository에 아직 데이터 저장과 관련없는 별도의 메서드를 추가로 작성해야합니다.</p><p id="1a3d4b87_45">차라리 저장된지 확인하기 위해 저장된 OrderId라도 반환하면 검증이 편할거같아서 수정했습니다.</p><p id="1a3d4b87_46">처음부터 public으로 접근제어를 모두 열어 놓는게 아니라 , 코드를 작성하면서 public으로 변경해야하는 애들만 변경하도록해서 private을 유지하도록 합니다.</p></section><div class="last-modified">Last modified: 01 2월 2024</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="test-tddorder-sc3-03-스프링부트와api테스트-md.html" class="navigation-links__prev">스프링 부트와 API Test</a><a href="tdd-inflean.html" class="navigation-links__next">TDD-inflean</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="https://resources.jetbrains.com/writerside/apidoc/6.6.6-b205/app.js"></script></body></html>
