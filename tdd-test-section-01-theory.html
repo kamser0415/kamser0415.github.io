@@ -1,0 +1,278 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-colors-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2024-02-29T17:39:04.4218069"><title>이론 수업 | Study</title><script type="application/json" id="virtual-toc-data">[{"id":"98a80e12_98","level":0,"title":"실기로 배우는 간단한 테스트 작업 방법 소개","anchor":"#98a80e12_98"},{"id":"98a80e12_131","level":0,"title":"테스트란 ?","anchor":"#98a80e12_131"},{"id":"tdd","level":0,"title":"TDD (테스트 주도 개발)","anchor":"#tdd"},{"id":"98a80e12_174","level":0,"title":"개발자의 고민","anchor":"#98a80e12_174"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="https://resources.jetbrains.com/writerside/apidoc/6.6.6-b205/app.css" rel="stylesheet"><link rel="apple-touch-icon" sizes="180x180" href="https://jetbrains.com/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="https://jetbrains.com/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="https://jetbrains.com/favicon-16x16.png"><link rel="manifest" href="site.webmanifest"><meta name="msapplication-TileColor" content="#000000"><meta name="msapplication-TileImage" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-144x144.png"><meta name="msapplication-square70x70logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-70x70.png"><meta name="msapplication-square150x150logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-150x150.png"><meta name="msapplication-wide310x150logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-310x150.png"><meta name="msapplication-square310x310logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-310x310.png"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="이론 수업 | Study"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="Study Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="/learning_cording/1.0/tdd-test-section-01-theory.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="이론 수업 | Study"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "/learning_cording/1.0/tdd-test-section-01-theory.html#webpage",
+    "url": "/learning_cording/1.0/tdd-test-section-01-theory.html",
+    "name": "이론 수업 | Study",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "/learning_cording/#website",
+    "url": "/learning_cording/",
+    "name": "Study Help"
+}</script><!-- End Schema.org --></head><body data-id="tdd-test-section-01-theory" data-main-title="이론 수업" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="TDD-inflean.md|TDD-inflean"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>Study 1.0 Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="tdd-test-section-01-theory" id="tdd-test-section-01-theory.md">이론 수업</h1><p id="98a80e12_96"><a href="https://inf.run/EYKf" id="98a80e12_97" data-external="true" rel="noopener noreferrer">출처</a></p><section class="chapter"><h2 id="98a80e12_98" data-toc="98a80e12_98">실기로 배우는 간단한 테스트 작업 방법 소개</h2><p id="98a80e12_99">먼저 간단한 계산기를 만들고 테스트 코드를 넣어서 리팩토링을 합니다.</p><div class="code-block" data-lang="java">
+public class Main {
+
+    public static void main(String[] args) {
+
+        System.out.println(&quot;1 + 2 :&quot;);
+        Scanner scanner = new Scanner(System.in);
+        String result = scanner.nextLine();
+
+
+        String[] parts = result.split(&quot; &quot;);
+        long num1 = Long.parseLong(parts[0]);
+        long num2 = Long.parseLong(parts[2]);
+        String operation = parts[1];
+
+        long answer = 0;
+        switch (operation) {
+            case &quot;+&quot; :
+                answer = num1 + num2;
+                break;
+            case &quot;-&quot; :
+                answer = num1 - num2;
+                break;
+            case &quot;*&quot; :
+                answer = num1 * num2;
+                break;
+            case &quot;/&quot; :
+                answer = num1 / num2;
+                break;
+            default:
+                throw new InvalidOperatorException();
+        }
+
+        System.out.println(&quot;answer = &quot; + answer);
+    }
+}
+</div><p id="98a80e12_101"><span class="control" id="98a80e12_102">1. java 12버전 인텔리제이 리팩토링</span></p><div class="code-block" data-lang="java">
+ long answer = switch (operation) {
+    case &quot;+&quot; -&gt; num1 + num2;
+    case &quot;-&quot; -&gt; num1 - num2;
+    case &quot;*&quot; -&gt; num1 * num2;
+    case &quot;/&quot; -&gt; num1 / num2;
+    default -&gt; throw new InvalidOperatorException();
+};
+</div><p id="98a80e12_104"><code class="code" id="98a80e12_105">switch</code>문장을 별도의 클래스로 분리하기</p><div class="code-block" data-lang="java">
+package org.example;
+
+public class Calculator {
+
+    public long calculate(long num1, String operator, long num2) {
+        return switch (operator) {
+            case &quot;+&quot; -&gt; num1 + num2;
+            case &quot;-&quot; -&gt; num1 - num2;
+            case &quot;*&quot; -&gt; num1 * num2;
+            case &quot;/&quot; -&gt; num1 / num2;
+            default -&gt; throw new InvalidOperatorException();
+        };
+    }
+}
+</div><p id="98a80e12_107"><span class="control" id="98a80e12_108">2. 데이터 받는 부분 리팩토링</span></p><div class="code-block" data-lang="java">
+public class CalculatorRequestReader {
+    public String[] read() {
+        System.out.println(&quot;1 + 2 :&quot;);
+        Scanner scanner = new Scanner(System.in);
+        String result = scanner.nextLine();
+        return result.split(&quot; &quot;);
+    }
+}
+</div><p id="98a80e12_110"><span class="control" id="98a80e12_111">3. 데이터 구조화</span><br> 데이터를 단순 기본형 타입으로 나누어서 관리하는 것보다 구조화로 관리할 수 있으면 리팩토링을 통해서 구조화를 하는 것이 좋다.</p><p id="98a80e12_113">추가로 모든 데이터 필수이므로 final을 추가하여 <code class="code" id="98a80e12_114">VO</code>로 선언합니다.</p><div class="code-block" data-lang="java">
+public class CalculationRequest {
+    private final long num1;
+    private final long num2;
+    private final String operation;
+
+    public CalculationRequest(String[] parts) {
+        this.num1 = Long.parseLong(parts[0]);
+        this.num2 = Long.parseLong(parts[2]);
+        this.operation = parts[1];
+    }
+
+    public long getNum1() {
+        return num1;
+    }
+
+    public long getNum2() {
+        return num2;
+    }
+
+    public String getOperation() {
+        return operation;
+    }
+}
+</div><p id="98a80e12_116">추가로 검증 로직을 추가합니다.</p><section class="chapter"><h3 id="98a80e12_117" data-toc="98a80e12_117">불필요한 값을 모두 받을 필요가 없다.</h3><p id="98a80e12_118"><span class="control" id="98a80e12_119">검증로직</span></p><div class="code-block" data-lang="java">
+public CalculationRequest(String[] parts) {
+    if (parts.length != 3) {
+        throw new RedRequestException();
+    }
+    if (parts[1].length() != 1) {
+        throw new InvalidOperatorException();
+    }
+    if (isInvalidOperator(parts)) {
+        throw new InvalidOperatorException();
+    }
+    this.operation = parts[1];
+    this.num1 = Long.parseLong(parts[0]);
+    this.num2 = Long.parseLong(parts[2]);
+}
+</div><div class="code-block" data-lang="java">
+private static boolean isInvalidOperator(String[] parts) {
+    return  !parts[1].equals(&quot;+&quot;) &amp;&amp; 
+            !parts[1].equals(&quot;-&quot;) &amp;&amp; 
+            !parts[1].equals(&quot;*&quot;) &amp;&amp; 
+            !parts[1].equals(&quot;/&quot;);
+}
+</div><p id="98a80e12_122">여기서 <code class="code" id="98a80e12_123">isInvalidOperator</code> 메서드는 입력값으로 Operation이 제대로 된 문자열인지 검증을 하는 기능을 합니다. 불필요한 값을 받을 필요가 없기 때문에 아래와 같이 리팩토링 합니다.</p><div class="code-block" data-lang="java">
+private static boolean isInvalidOperator(String operation) {
+    return !operation.equals(&quot;+&quot;) &amp;&amp;
+            !operation.equals(&quot;-&quot;) &amp;&amp;
+            !operation.equals(&quot;*&quot;) &amp;&amp;
+            !operation.equals(&quot;/&quot;);
+}
+</div><p id="98a80e12_125"><span class="control" id="98a80e12_126">4. 추가 리팩토링</span></p><div class="code-block" data-lang="java">
+public class CalculationRequest {
+    private static final Set&lt;String&gt; VALID_OPERATORS = Set.of(&quot;+&quot;, &quot;-&quot;, &quot;*&quot;, &quot;/&quot;);
+
+    private final long num1;
+    private final long num2;
+    private final String operation;
+
+    public CalculationRequest(String[] parts) {
+        if (parts == null || parts.length != 3) {
+            throw new IllegalArgumentException(&quot;Request must contain exactly three parts: num1, operator, num2&quot;);
+        }
+        String operator = parts[1];
+        if (operator == null || operator.length() != 1 || !VALID_OPERATORS.contains(operator)) {
+            throw new IllegalArgumentException(&quot;Invalid operator. Valid operators are: &quot; + VALID_OPERATORS);
+        }
+        this.operation = operator;
+        try {
+            this.num1 = Long.parseLong(parts[0]);
+            this.num2 = Long.parseLong(parts[2]);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException(&quot;Both numbers must be valid long values&quot;, e);
+        }
+    }
+
+    public long getNum1() {
+        return num1;
+    }
+
+    public long getNum2() {
+        return num2;
+    }
+
+    public String getOperation() {
+        return operation;
+    }
+}
+</div><p id="98a80e12_128">문자열을 비교하는 것보다 <code class="code" id="98a80e12_129">Set</code>자료형을 활용해서 검증하는 게 더 유지보수에 유리할 수 있습니다. <br> 그리고 if문이 사이에 있는 검증은 별도의 메서드로 분리해서 처리하는것도 가독성 좋게 합니다.</p></section></section><section class="chapter"><h2 id="98a80e12_131" data-toc="98a80e12_131">테스트란 ?</h2><p id="98a80e12_132">테스트는 어떤 시스템이 제대로 동작하는지 검증하는 과정입니다.</p><ol class="list _decimal" id="98a80e12_133" type="1"><li class="list__item" id="98a80e12_134"><p>인수 테스트: 사람이 직접 사용하면서 준비된 체크리스트를 체크하는 인수테스트</p></li><li class="list__item" id="98a80e12_135"><p>자동 테스트: 미리짜여진 코드를 비교하는 것.</p></li></ol><section class="chapter"><h3 id="98a80e12_136" data-toc="98a80e12_136">샘플</h3><div class="code-block" data-lang="java">
+@Test
+@DisplayName(&quot;이메일 회원가입을 할 수 있다&quot;)
+public void email(){
+    //given
+    UserCreateRequest userCreateRequest = UserCreateRequest.builder()
+        .email(&quot;foo@localhost.com&quot;)
+        .password(&quot;1234&quot;)
+        .build();
+    
+    FakeRegisterEmailSender registerEmailSender = new FakeRegisterEmailSender();
+    
+    //when
+    UserService sut = UserService.builder()
+        .registerEmailSender(RegisterEableSender)
+        .userRepository(userRepository)
+        .build();
+        
+    sut.register(userCreateRequest);
+    
+    //then
+    User user = userRepository.getEmail(&quot;foo@localhost.com&quot;);
+    assertThat(user.isPending()).isTrue();
+    assertThat(registerEmailSender.findLatestMessage(&quot;foo@localhost.com&quot;).isPresent()).isTrue();
+    assertThat(registerEmailSender.findLatestMessage(&quot;foo@localhost.com&quot;).get()).isEqualTo(&quot;~~~&quot;);
+</div><p id="98a80e12_138">샘플 코드를 보면 상황이 주어지고, 테스트하려는 기능에 대한 응답 결과를 테스트합니다. <br><span class="control" id="98a80e12_140">결과값과 기댓값을 코드로 비교하는 것이 자동화 테스트입니다.</span></p></section><section class="chapter"><h3 id="spring-data-jpa" data-toc="spring-data-jpa">Spring Data Jpa 샘플 테스트</h3><div class="code-block" data-lang="java">
+@ExtendWith(SpringExtension.class)
+@DataJpaTest
+@TestPropertySource(&quot;classpath:test-application.properties&quot;)
+class UserRepositoryTest {
+    
+    @Autowired
+    private UserRepository userRepository;
+    
+    @Test
+    @DisplayName(&quot;사용자 정보를 save로 저장할 수 있다.&quot;)
+    void save1(){
+        //given
+        UserEntity userEntity = new UserEntity();
+        userEntity.setEmail(&quot;kok2020@naver.com&quot;);
+        userEntity.setStatus(UserStatus.PENDING);
+        userEntity.setCertificationCode(&quot;hash123456789&quot;);
+        userEntity.setAddress(&quot;Seoul&quot;);
+        userEntity.setLastLoginAt(Clock.systemUTC().millis());
+        
+        //when
+        userEntity = userRepository.save(userEntity);
+        
+        //then
+        assertThat(userEntity.getId()).isNotNull();
+        
+    }
+}
+</div><p id="98a80e12_142">저장이 제대로 되었는지 확인하기 위해 테스트 코드를 작성합니다.</p></section></section><section class="chapter"><h2 id="tdd" data-toc="tdd">TDD (테스트 주도 개발)</h2><p id="98a80e12_143"><span class="control" id="98a80e12_144">TDD로 작성하려는 서비스 메소드</span></p><div class="code-block" data-lang="java">
+@Service
+@RequiredArgsConstructor
+public class PostService {
+
+    public PostEntity getPostById(Long id) {
+        throw new RuntimeException(&quot;Method is not implements&quot;);
+    }
+}
+</div><p id="98a80e12_146"><span class="control" id="98a80e12_147">when부분을 제외하고 준비</span></p><div class="code-block" data-lang="java">
+@SpringBootTest
+@TestPropertySource(&quot;classpath:test-application.properties&quot;)
+class PostServiceTest {
+    @Autowired
+    private PostService postSerice;
+    
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PostRepository postRepository;
+    
+    @Test
+    @DisplayName(&quot;게시물을 아이디로 조회 할 수 있다.&quot;)
+    void selectById(){
+        //given
+        UserEntity userEntity = userRepository.save(new UserEntity());
+        PostEntity postEntity = new PostEntity();
+        postEntity.setWriter(userEntity);
+        postEntity.setContent(&quot;hello world&quot;);
+        postEntity.setCreatedAt(Clock.systemUTC().millis());
+        postEntity.setModifiedAt(Clock.systemUTC().millis());
+        postEntity = postRepository.save(postEntity);
+        
+        //when
+        PostEntity result = postService.getPostById(postEntity.getId());
+        
+        //then
+        assertThat(postEntity.getContent()).isEqualTo(&quot;hello world&quot;);
+    }   
+}
+</div><p id="98a80e12_149">테스트는 <code class="code" id="98a80e12_150">RED</code>로 실패하게 됩니다. <br> 여기서 중요한 건 레드 단계에서는 테스트가 실패하는지까지 제대로 확인하는게 중요합니다.</p><p id="98a80e12_152"><span class="control" id="98a80e12_153">GREEN 단계: 실제구현</span></p><div class="code-block" data-lang="java">
+@Service
+@RequiredArgsConstructor
+public class PostService {
+
+    public PostEntity getPostById(Long id) {
+        return postRepository.findById(id)
+            .orElseThrow(()-&gt; new ResourceNotFoundException(&quot;Post&quot;,id));
+    }
+}
+</div><p id="98a80e12_155"><span class="control" id="98a80e12_156">BLUE : 리팩토링</span><br> 초록불을 본 이후로 부터는 리팩토링을 합니다.</p><section class="chapter"><h3 id="98a80e12_158" data-toc="98a80e12_158">장점</h3><section class="chapter"><h4 id="98a80e12_159" data-toc="98a80e12_159">깨지는 테스트를 먼저 작성해야하기 때문에, 인터페이스를 먼저 만드는 것이 강제된다.</h4><p id="98a80e12_160">인터페이스를 생각하지 않고 먼저 구현체를 만드는 실수가 줄어듭니다. <br> TDD에 따르면 레드 단계에서는 일단 컴파일되는 코드를 먼저 만들고 테스트가 실패하는지까지 확인해야합니다. <br> 그래서 개발자가 구현체를 만드는 것보다 인터페이스를 만드는 것에 집중하게 됩니다. <br> 객체들이 어떤 책임을 지고 이 객체는 어디까지 해줘야 하는지 그런걸 먼저 생각하게 만드는 겁니다.</p><p id="98a80e12_164">인터페이스를 주목해서 만든다는 건 객체지향의 핵심 원리중 하나인 행동에 집중할 수 있습니다.</p><p id="98a80e12_165">TDD가 What/Who 사이클을 고민하게 도와줍니다. <br> What/Who 사이클은 <span class="control" id="98a80e12_167">어떤 행위를 누가 수행할지 결정하는 과정</span> 입니다.</p><p id="98a80e12_168">TDD로 개발하는 코드는 프로젝트의 대부분의 코드를 커버하는 테스트가 생기게 됩니다. <br> 신규 개발을 하더라도 부담없이 개발할 수 있는거죠. <br> 이미 테스트 코드가 작성되어 전체 테스트 코드를 돌리면 문제를 파악할 수 있습니다.</p></section></section><section class="chapter"><h3 id="98a80e12_171" data-toc="98a80e12_171">단점</h3><section class="chapter"><h4 id="98a80e12_172" data-toc="98a80e12_172">초기 개발 비용이 부담될 수 있습니다.</h4></section><section class="chapter"><h4 id="98a80e12_173" data-toc="98a80e12_173">난이도가 있다.</h4></section></section></section><section class="chapter"><h2 id="98a80e12_174" data-toc="98a80e12_174">개발자의 고민</h2><section class="chapter"><h3 id="98a80e12_175" data-toc="98a80e12_175">무의미한 테스트</h3><p id="98a80e12_176">이미 검증이 완료된 <code class="code" id="98a80e12_177">getPostById()</code>를 테스트하기 위해 60줄이넘는 테스트 코드를 작성해야합니다. <br><code class="code" id="98a80e12_179">Jpa</code>를 테스트하기위해서 스프링 컨테이너도 실행되어야하고 , H2 데이터베이스도 연동되어야하기 때문에 무거운 테스트가 됩니다.</p><p id="98a80e12_180">그런데 TDD 테스트 코드를 작성하는 장점이 인터페이스를 먼저 만들기 때문에 행동에 집중할 수 있다는 것인데<br> 행동은 메서드나 함수가 아닙니다. 중요한 로직을 잘 구분해서 그 코드에 테스트 코드를 넣는게 좋습니다.</p></section><section class="chapter"><h3 id="98a80e12_182" data-toc="98a80e12_182">느리고 쉽게 깨지는 테스트</h3><p id="98a80e12_183">위 처럼 데이터가 제대로 저장되었는지 확인하기 위해서 <code class="code" id="98a80e12_184">300ms</code>가 필요합니다. 여기서 동일한 방식의 테스트가 200개가 된다면 1분이 넘는 시간이 테스트 코드에 소비됩니다.</p><p id="98a80e12_185">H2 DB를 사용하다보니 테스트가 종종 깨질 수 도 있습니다.</p></section><section class="chapter"><h3 id="98a80e12_186" data-toc="98a80e12_186">테스트가 불가능한 코드</h3><p id="98a80e12_187">시간과 같은 동일한 값이 들어가지 않는 경우에 수정된 값을 확인할 수 없기 때문에 <code class="code" id="98a80e12_188">mock</code>을 사용하게 되는데 그건 설계가 잘못되었다는 의미로 구조를 변경해야합니다.</p></section></section><div class="last-modified">Last modified: 29 2월 2024</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="tdd-test-section-00-ot.html" class="navigation-links__prev">tdd-test-section-00-OT</a><a href="container.html" class="navigation-links__next">Container</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="https://resources.jetbrains.com/writerside/apidoc/6.6.6-b205/app.js"></script></body></html>

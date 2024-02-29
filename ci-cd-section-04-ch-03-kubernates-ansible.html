@@ -1,0 +1,75 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-colors-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2024-02-29T17:39:04.336718"><title>ci-cd-section-04-ch-03-kubernates-ansible | Study</title><script type="application/json" id="virtual-toc-data">[{"id":"docker-window","level":0,"title":"docker \u003e window로 접속할 경우","anchor":"#docker-window"},{"id":"99bf0030_105","level":0,"title":"명령어 테스트 및 실행시 주의점","anchor":"#99bf0030_105"},{"id":"99bf0030_111","level":0,"title":"플레이북 작성시","anchor":"#99bf0030_111"},{"id":"jenkins","level":0,"title":"Jenkins 활용하기","anchor":"#jenkins"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="https://resources.jetbrains.com/writerside/apidoc/6.6.6-b205/app.css" rel="stylesheet"><link rel="apple-touch-icon" sizes="180x180" href="https://jetbrains.com/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="https://jetbrains.com/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="https://jetbrains.com/favicon-16x16.png"><link rel="manifest" href="site.webmanifest"><meta name="msapplication-TileColor" content="#000000"><meta name="msapplication-TileImage" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-144x144.png"><meta name="msapplication-square70x70logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-70x70.png"><meta name="msapplication-square150x150logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-150x150.png"><meta name="msapplication-wide310x150logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-310x150.png"><meta name="msapplication-square310x310logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-310x310.png"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="ci-cd-section-04-ch-03-kubernates-ansible | Study"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="Study Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="/learning_cording/1.0/ci-cd-section-04-ch-03-kubernates-ansible.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="ci-cd-section-04-ch-03-kubernates-ansible | Study"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "/learning_cording/1.0/ci-cd-section-04-ch-03-kubernates-ansible.html#webpage",
+    "url": "/learning_cording/1.0/ci-cd-section-04-ch-03-kubernates-ansible.html",
+    "name": "ci-cd-section-04-ch-03-kubernates-ansible | Study",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "/learning_cording/#website",
+    "url": "/learning_cording/",
+    "name": "Study Help"
+}</script><!-- End Schema.org --></head><body data-id="ci-cd-section-04-ch-03-kubernates-ansible" data-main-title="ci-cd-section-04-ch-03-kubernates-ansible" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="CI-CD.md|CI/CD///Jenkins.md|Jenkins"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>Study 1.0 Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="ci-cd-section-04-ch-03-kubernates-ansible" id="ci-cd-section-04-ch-03-kubernates-ansible.md">ci-cd-section-04-ch-03-kubernates-ansible</h1><p id="99bf0030_78">Ansible로 쿠버네티스 자동화하는 것이 목적입니다.</p><figure id="99bf0030_79"><img alt="image_76.png" src="images/image_76.png" title="image_76.png" width="1213" height="538"></figure><p id="99bf0030_80">Ansible 서버에서 쿠버네티스 클러스터에 접속해서 저장되어있는 <code class="code" id="99bf0030_81">yaml</code>파일 실행하는 실습입니다.</p><p id="99bf0030_82"><span class="control" id="99bf0030_83">도커 특정 컨테이너만 확인할때 사용하는 명령어</span></p><div class="code-block" data-lang="actionscript">
+docker ps -a | findStr ansible
+</div><section class="chapter"><h2 id="docker-window" data-toc="docker-window">docker &gt; window로 접속할 경우</h2><p id="99bf0030_85">도커 Ansible에서 준비과정이 필요합니다.</p><p id="99bf0030_86">준비과정없이 <code class="code" id="99bf0030_87">ssh-copy-id</code>를 실행할 경우 도커 리눅스와 윈도우 환경의 통신 방법이 다르기 때문에 파일이 깨질수 있습니다.</p><p id="99bf0030_88">리눅스 서버는 <code class="code" id="99bf0030_89">SSH</code>를 통해서 ansible이 통신하는 방면에 window 서버는 <code class="code" id="99bf0030_90">winrm</code> 이라는 리모트 매니저를 통해서 통신하기 때문입니다.</p><p id="99bf0030_91">그 전에 window 환경은 openSSH를 추가 기능을 설치받고 활성화해야합니다. <a href="https://www.inflearn.com/questions/686301" id="99bf0030_92" data-external="true" rel="noopener noreferrer">SSH 활성화 방법</a></p><p id="99bf0030_93"><a href="https://www.inflearn.com/questions/686434" id="99bf0030_94" data-external="true" rel="noopener noreferrer">출처</a></p><ol class="list _decimal" id="99bf0030_95" type="1"><li class="list__item" id="99bf0030_96"><p id="99bf0030_97">ansible-server에서 pywinrm을 설치합니다.</p><div class="code-block" data-lang="actionscript">
+$ yum install python39
+$ pip3 install --upgrade pip
+$ pip install pywinrm 
+</div></li><li class="list__item" id="99bf0030_99"><p id="99bf0030_100">window IP 밑에 추가 설정을 작성합니다.</p><div class="code-block" data-lang="actionscript">
+[windows]
+192.168.0.93
+
+[windows:vars]
+ansible_password= 비밀번호(window 이메일 연동시 연동 비밀번호)
+ansible_connection=winrm
+ansible_winrm_server_cert_validation=ignore
+ansible_user= (pwd 입력후 나오는 users 이후 단어)
+ansible_port=5986 
+</div></li><li class="list__item" id="99bf0030_102"><p id="99bf0030_103">Window 서버에서 Powershell 관리자모드에서 실행합니다.</p><div class="code-block" data-lang="actionscript">
+$url = &quot;https://raw.githubusercontent.com/AlbanAndrieu/ansible-windows/master/files/ConfigureRemotingForAnsible.ps1&quot;
+$file = &quot;$env:temp\ConfigureRemotingForAnsible.ps1&quot;
+(New-Object -TypeName System.Net.WebClient).DownloadFile($url,$file)
+powershell.exe -ExecutionPolicy ByPass -File $file
+</div></li></ol></section><section class="chapter"><h2 id="99bf0030_105" data-toc="99bf0030_105">명령어 테스트 및 실행시 주의점</h2><p id="99bf0030_106">window 환경에서 명령을 실행할 경우에 <code class="code" id="99bf0030_107">command</code>가 아니라 <code class="code" id="99bf0030_108">win_command</code> 모듈로 명령을 작성합니다.</p><p id="99bf0030_109">테스트 핑 실행</p><div class="code-block" data-lang="actionscript">
+ansible -i ./k8s/hosts windows -m win_ping
+192.168.0.93 | SUCCESS =&gt; {
+    &quot;changed&quot;: false,
+    &quot;ping&quot;: &quot;pong&quot;
+}
+</div></section><section class="chapter"><h2 id="99bf0030_111" data-toc="99bf0030_111">플레이북 작성시</h2><div class="code-block" data-lang="actionscript">
+- name: Create pods using deployment
+  hosts: windows
+  # become: true
+  # user: ubuntu
+
+  tasks:
+  - name: delete the previous deployment
+    win_command: kubectl delete deployment.apps/cicd-deployment
+
+  - name: create a deployment
+    win_command: kubectl apply -f cicd-devops-deployment.yml
+</div><p id="99bf0030_113">윈도우 환경에서는 동작하는 모듈을 다르게 사용하여 사용합니다.</p><p id="99bf0030_114">또한 macOS나 window 환경에서 오류가 발생하는 경우 <code class="code" id="99bf0030_115">kubectl</code>과 <code class="code" id="99bf0030_116">kubernatesYaml파일.yml</code>앞에 절대 경로를 작성합니다.</p><div class="code-block" data-lang="actionscript">
+# pwd
+Path
+----
+C:\Users\(path)  &lt;-- cicd-devops-deployment 가 있는 위치를 전부 작성합니다.
+</div><p id="99bf0030_118">kubectl도 환경설정이 되어있지 않기 때문에 문제가 발생할 수 있기 때문에 미니큐브 위치를 추가합니다.</p><div class="code-block" data-lang="actionscript">
+
+tasks:
+- name: create a deployment
+  command: /usr/local/bin/kubectl apply -f C:/Users/(path)/`파일위치`
+</div><p id="99bf0030_120">도커 <code class="code" id="99bf0030_121">ansible-server</code>에 접속하면 접속 계정이 <code class="code" id="99bf0030_122">root</code>이지만, 윈도우나 macOS는 접속 계정이름을 root로 사용하지 않습니다.</p><p id="99bf0030_123">따라서 접속하려는 계정의 이름을 별도로 지정해야합니다.</p><div class="code-block" data-lang="actionscript">
+ansible-playbook -i ./k8s/hosts k8s-cicd-service-playbook.yml -u (접속계정명)
+</div></section><section class="chapter"><h2 id="jenkins" data-toc="jenkins">Jenkins 활용하기</h2><section class="chapter"><h3 id="99bf0030_125" data-toc="99bf0030_125">아이템 등록후 쿠버네티스 제어 확인하기</h3><p id="99bf0030_126">먼저 Ansible을 통해서 쿠버네티스를 제어하기 전에 Jenkins에서 빌드를한 결과를 쿠버네티스 서버에 복사하고, 쿠버네티스 내부에 있는 <code class="code" id="99bf0030_127">.yml</code>파일을 동작시킬 수 있는지 먼저 테스트를 하려고 합니다.</p><figure id="99bf0030_128"><img alt="image_77.png" src="images/image_77.png" title="image_77.png" width="1111" height="506"></figure><p id="99bf0030_129">지금까지 과정을 정리해보면</p><ol class="list _decimal" id="99bf0030_130" type="1"><li class="list__item" id="99bf0030_131"><p>Docker Ansible Server -&gt; Docker kubernates 제어를 확인합니다.</p></li><li class="list__item" id="99bf0030_132"><p>Docker Jenkins -&gt; Docker kubernates 제어를 확인합니다.</p></li></ol><aside class="prompt" data-type="tip" data-title="" id="99bf0030_133"><p id="99bf0030_134">kubectl 명령어 작성시 절대 경로를 작성하게 되는건 도커로 동작하는 쿠버네티스이기 때문입니다. 실제 클라우드나 서버환경에서는 이렇게 작성하실 필요가없습니다.</p></aside><p id="99bf0030_135"><span class="control" id="99bf0030_136">쿠버네티스 서버: 환경설정 등록</span></p><figure id="99bf0030_137"><img alt="image_79.png" src="images/image_79.png" title="image_79.png" width="725" height="934"></figure><p id="99bf0030_138"><span class="control" id="99bf0030_139"><span class="emphasis" id="99bf0030_140">다른 server와 다르게 Username에 원도우 사용자 이름이 들어갑니다.</span></span></p><p id="99bf0030_141"><span class="control" id="99bf0030_142">빌드후 조치 설정</span></p><figure id="99bf0030_143"><img alt="image_78.png" src="images/image_78.png" title="image_78.png" width="627" height="981"></figure><aside class="prompt" data-type="tip" data-title="" id="99bf0030_144"><p id="99bf0030_145">오류가 발생시 kubectl과 cicd.yml 파일을 절대경로로 작성합니다.</p></aside><div class="code-block" data-lang="actionscript">
+/usr/local/bin/kubectl apply -f cicd-deployment.yml
+</div></section><section class="chapter"><h3 id="ansible" data-toc="ansible">Ansible로 쿠버네티스 사용하기</h3><figure id="99bf0030_147"><img alt="image_80.png" src="images/image_80.png" title="image_80.png" width="680" height="1011"></figure><p id="99bf0030_148">젠킨스에서 쿠버네티스 제어 성공하면, Ansible로 쿠버네티스를 제어하는지 확인합니다.</p><div class="code-block" data-lang="actionscript">
+NAME                              READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/cicd-deployment   2/2     2            2           59s
+
+NAME                                         DESIRED   CURRENT   READY   AGE
+replicaset.apps/cicd-deployment-5695b79858   2         2         2       59s
+</div><p id="99bf0030_150">제어가 되어 정상적으로 <code class="code" id="99bf0030_151">Deployment</code>와 <code class="code" id="99bf0030_152">Service</code>가 동작하는지 확인합니다.</p></section></section><div class="last-modified">Last modified: 29 2월 2024</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="ci-cd-section-04-ch-01-kubernates-cli.html" class="navigation-links__prev">ci-cd-section-04-ch-01-kubernates-cli</a><a href="ci-cd-section-04-ch-04-ci-cd-process.html" class="navigation-links__next">ci-cd-section-04-ch-04-ci-cd-process</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="https://resources.jetbrains.com/writerside/apidoc/6.6.6-b205/app.js"></script></body></html>
