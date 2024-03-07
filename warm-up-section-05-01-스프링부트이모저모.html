@@ -1,0 +1,52 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-colors-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2024-03-07T14:55:59.8842562"><title>warm-up-section-05-01-스프링부트이모저모 | Study</title><script type="application/json" id="virtual-toc-data">[{"id":"build-gradle","level":0,"title":"build.gradle","anchor":"#build-gradle"},{"id":"yml","level":0,"title":"yml","anchor":"#yml"},{"id":"properties","level":0,"title":"properties","anchor":"#properties"},{"id":"lombok","level":0,"title":"Lombok","anchor":"#lombok"},{"id":"72b7afec_54","level":0,"title":"마이그레이션 툴이 있으면 빨갛게 알려줌","anchor":"#72b7afec_54"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="https://resources.jetbrains.com/writerside/apidoc/6.6.6-b205/app.css" rel="stylesheet"><link rel="apple-touch-icon" sizes="180x180" href="https://jetbrains.com/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="https://jetbrains.com/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="https://jetbrains.com/favicon-16x16.png"><link rel="manifest" href="site.webmanifest"><meta name="msapplication-TileColor" content="#000000"><meta name="msapplication-TileImage" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-144x144.png"><meta name="msapplication-square70x70logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-70x70.png"><meta name="msapplication-square150x150logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-150x150.png"><meta name="msapplication-wide310x150logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-310x150.png"><meta name="msapplication-square310x310logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-310x310.png"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="warm-up-section-05-01-스프링부트이모저모 | Study"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="Study Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="/learning_cording/1.0/warm-up-section-05-01-스프링부트이모저모.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="warm-up-section-05-01-스프링부트이모저모 | Study"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "/learning_cording/1.0/warm-up-section-05-01-스프링부트이모저모.html#webpage",
+    "url": "/learning_cording/1.0/warm-up-section-05-01-스프링부트이모저모.html",
+    "name": "warm-up-section-05-01-스프링부트이모저모 | Study",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "/learning_cording/#website",
+    "url": "/learning_cording/",
+    "name": "Study Help"
+}</script><!-- End Schema.org --></head><body data-id="warm-up-section-05-01-스프링부트이모저모" data-main-title="warm-up-section-05-01-스프링부트이모저모" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="inflean-warm-up-0.md|inflean-warm-up-0///warm-up-section-01.md|생애 최초 API 만들기"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>Study 1.0 Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="warm-up-section-05-01-스프링부트이모저모" id="warm-up-section-05-01-스프링부트이모저모.md">warm-up-section-05-01-스프링부트이모저모</h1><section class="chapter"><h2 id="build-gradle" data-toc="build-gradle">build.gradle</h2><p id="72b7afec_2">빌드 스크립트라고불리며, gradle을 이용해 프로젝트를 빌드하고 의존성을 관리하기 위해 작성되었습니다.</p><ul class="list _ul" id="72b7afec_3"><li class="list__item" id="72b7afec_4"><p>jvm 언어로 모두 사용 가능합니다</p></li></ul><section class="chapter"><h3 id="plugins" data-toc="plugins">plugins 블락</h3><div class="code-block" data-lang="gradle">
+plugins {
+	id 'org.springframework.boot' version '2.7.6'
+	id 'io.spring.dependency-management' version '1.0.12.RELEASE'
+	id 'java'
+}
+</div><p id="72b7afec_6"><span class="control" id="72b7afec_7">역할</span><br> 블럭안에 플러그인을 추가할 수 있도록 합니다.</p><div class="code-block" data-lang="gradle">
+id 'org.springframework.boot' version '2.7.6'
+</div><ol class="list _decimal" id="72b7afec_10" type="1"><li class="list__item" id="72b7afec_11"><p>스프링을 빌드했을 때 실행 가능한 <code class="code" id="72b7afec_12">jar</code>파일이 나오게 도와줍니다.</p></li><li class="list__item" id="72b7afec_13"><p>스프링 애플리케이션을 실행할 수 있게 도와주고</p></li><li class="list__item" id="72b7afec_14"><p>또 다른 플러그 인들이 잘 적용될 수 있게 해준다.</p></li></ol><div class="code-block" data-lang="gradle">
+id 'io.spring.dependency-management' version '1.0.12.RELEASE'
+</div><p id="72b7afec_16">외부 라이브러리,프레임 워크의 버전관리에 도움을 주고 서로 얽혀있는 의존성을 처리하는데 도와준다.</p><div class="code-block" data-lang="gradle">
+id 'java'
+</div><ul class="list _ul" id="72b7afec_18"><li class="list__item" id="72b7afec_19"><p>Java 프로젝트를 개발하는데 필요한 기능들을 추가해줍니다.</p></li><li class="list__item" id="72b7afec_20"><p>jvm gradle 플러그인을 사용할 수 있는 기반을 마련해준다.</p></li></ul><div class="code-block" data-lang="gradle">
+id 'name' version 'version' 형식으로 추가할 수 있다.
+</div></section><section class="chapter"><h3 id="72b7afec_22" data-toc="72b7afec_22">프로젝트와 관련된 설정</h3><div class="code-block" data-lang="gradle">
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+</div><ul class="list _ul" id="72b7afec_24"><li class="list__item" id="72b7afec_25"><p>group: 프로젝트를 만드는 그룹에 대한 설정과 빌드의 결과물에 프로젝트 정보가 담기게 된다.</p></li><li class="list__item" id="72b7afec_26"><p>version: 0.0.1 snapshot을 변경하면 jar 파일도 반영된다.</p></li><li class="list__item" id="72b7afec_27"><p>sourceCompatibility: JDK 버전을 의미한다.</p></li></ul></section><section class="chapter"><h3 id="repositories" data-toc="repositories">repositories 블락</h3><div class="code-block" data-lang="gradle">
+repositories {
+	mavenCentral()
+}
+</div></section><section class="chapter"><h3 id="dependencies" data-toc="dependencies">dependencies 블락</h3><div class="code-block" data-lang="gradle">
+implementation 'org.springframework.boot:spring-boot-starter-web'
+runtimeOnly 'com.h2database:h2'
+</div><ul class="list _ul" id="72b7afec_30"><li class="list__item" id="72b7afec_31"><p>implementation: 이 뒤에 오는 라이브러리나 프레임워크는 항상 사용한다는 의미</p></li><li class="list__item" id="72b7afec_32"><p>runtimeOnly: 코드를 실행할 경우에만 사용한다는 의미</p></li><li class="list__item" id="72b7afec_33"><p>testimplementation: 테스트 코드를 컴파일하거나 실행할 때 사용한다.</p></li></ul><p id="72b7afec_34">의존성 설정할때 언제 사용할지 명시해주는 의미입니다.</p></section></section><section class="chapter"><h2 id="yml" data-toc="yml">yml</h2><div class="code-block" data-lang="yaml">
+key=value 
+</div><p id="72b7afec_36">value로 들어갈 수 있는 값</p><ol class="list _decimal" id="72b7afec_37" type="1"><li class="list__item" id="72b7afec_38"><p id="72b7afec_39">true/false의 boolean 타입</p></li><li class="list__item" id="72b7afec_40"><p id="72b7afec_41">숫자 (그냥 숫자)</p></li><li class="list__item" id="72b7afec_42"><p id="72b7afec_43">문자열(큰따옴표가 없어도 문자로 인식)</p></li><li class="list__item" id="72b7afec_44"><p id="72b7afec_45">배열도 들어갈 수 있다.</p><div class="code-block" data-lang="yaml">
+ person:
+   name: lomom
+   age: 322
+   dogs:
+    - 초코
+    - 망고
+</div><p id="72b7afec_47">이렇게 <code class="code" id="72b7afec_48">-</code>로 배열을 나타낼 수 있습니다.</p></li></ol><p id="72b7afec_49"><span class="control" id="72b7afec_50">주석(#) 을 사용</span></p></section><section class="chapter"><h2 id="properties" data-toc="properties">properties</h2><p id="72b7afec_51">파일마다 구획을 구분해서 사용한다.</p><div class="code-block" data-lang="actionscript">
+application-dev.properties
+</div></section><section class="chapter"><h2 id="lombok" data-toc="lombok">Lombok</h2><p id="72b7afec_53">보일러 플레이트 코드를줄일 수 있습니다.</p></section><section class="chapter"><h2 id="72b7afec_54" data-toc="72b7afec_54">마이그레이션 툴이 있으면 빨갛게 알려줌</h2></section><div class="last-modified">Last modified: 07 3월 2024</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="warm-up-section-05-01.html" class="navigation-links__prev">책 요구사항 05-01,02</a><a href="warm-up-section-01-project.html" class="navigation-links__next">미니 프로젝트</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="https://resources.jetbrains.com/writerside/apidoc/6.6.6-b205/app.js"></script></body></html>
