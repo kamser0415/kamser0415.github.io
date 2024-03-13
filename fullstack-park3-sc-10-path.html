@@ -1,0 +1,111 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-colors-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2024-03-14T00:16:00.8602169"><title>Reverse Proxy를 경로로 구분하기 | Study</title><script type="application/json" id="virtual-toc-data">[{"id":"docker-compose","level":0,"title":"docker-compose","anchor":"#docker-compose"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="https://resources.jetbrains.com/writerside/apidoc/6.6.6-b205/app.css" rel="stylesheet"><link rel="apple-touch-icon" sizes="180x180" href="https://jetbrains.com/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="https://jetbrains.com/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="https://jetbrains.com/favicon-16x16.png"><link rel="manifest" href="site.webmanifest"><meta name="msapplication-TileColor" content="#000000"><meta name="msapplication-TileImage" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-144x144.png"><meta name="msapplication-square70x70logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-70x70.png"><meta name="msapplication-square150x150logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-150x150.png"><meta name="msapplication-wide310x150logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-310x150.png"><meta name="msapplication-square310x310logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-310x310.png"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="Reverse Proxy를 경로로 구분하기 | Study"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="Study Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="/learning_cording/1.0/fullstack-park3-sc-10-path.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="Reverse Proxy를 경로로 구분하기 | Study"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "/learning_cording/1.0/fullstack-park3-sc-10-path.html#webpage",
+    "url": "/learning_cording/1.0/fullstack-park3-sc-10-path.html",
+    "name": "Reverse Proxy를 경로로 구분하기 | Study",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "/learning_cording/#website",
+    "url": "/learning_cording/",
+    "name": "Study Help"
+}</script><!-- End Schema.org --></head><body data-id="fullstack-park3-sc-10-path" data-main-title="Reverse Proxy를 경로로 구분하기" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="fullstack-park3-title.md|fullstack-park3"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>Study 1.0 Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="fullstack-park3-sc-10-path" id="fullstack-park3-sc-10-path.md">Reverse Proxy를 경로로 구분하기</h1><section class="chapter"><h2 id="docker-compose" data-toc="docker-compose">docker-compose</h2><div class="code-block" data-lang="actionscript">
+version: &quot;3&quot;
+  
+services:
+    nginxproxy:
+        image: nginx:1.18.0
+        ports:
+          - &quot;80:80&quot;
+        restart: always
+        volumes:
+            - &quot;./nginx/nginx.conf:/etc/nginx/nginx.conf&quot;
+
+    nginx:
+        depends_on:
+            - nginxproxy
+        image: nginx:1.18.0
+        restart: always
+
+    apache:
+        depends_on:
+            - nginxproxy
+        image: httpd:2.4.46
+        restart: always
+</div><section class="chapter"><h3 id="2e63a316_116" data-toc="2e63a316_116">프록시의 구조</h3><figure id="2e63a316_117"><img alt="image_145.png" src="images/image_145.png" title="image_145.png" width="3124" height="1324"></figure><p id="2e63a316_118">이미지 구조처럼 <code class="code" id="2e63a316_119">ReversedProxy</code> 역할을 하는 <code class="code" id="2e63a316_120">Nginx</code>에 설정을 변경해야합니다.</p><p id="2e63a316_121"><code class="code" id="2e63a316_122">Path</code>에 따라 서버 요청을 분기처리하기 때문에 <code class="code" id="2e63a316_123">Nginx의 server</code>부분을 수정합니다.</p><div class="code-block" data-lang="actionscript">
+docker-compose up -d
+docker ps 
+
+IMAGE        PORTS                               NAMES
+httpd:2.4.46 80/tcp                              05_nginx_ch_path-apache-1
+nginx:1.18.0 80/tcp                              05_nginx_ch_path-nginx-1
+nginx:1.18.0 0.0.0.0:80-&gt;80/tcp, :::80-&gt;80/tcp   05_nginx_ch_path-nginxproxy-1
+</div><p id="2e63a316_125">이제 프록시 역할을 하는 <code class="code" id="2e63a316_126">nginxproxy-1</code>에 접속하여 <code class="code" id="2e63a316_127">server</code>설정을 변경합니다.</p><div class="code-block" data-lang="actionscript">
+docker exec -it 05_nginx_ch_path-nginxproxy-1 bash  
+</div><p id="2e63a316_129">이후 에디터를 통해 파일을 수정해야하기 때문에 <code class="code" id="2e63a316_130">vim</code>을 설치합니다.</p><div class="code-block" data-lang="actionscript">
+keepalive_timeout 65;
+
+upstream docker-nginx {
+    server nginx:80;
+}
+
+upstream docker-apache {
+    server apache:80;
+}
+
+server {
+    listen 80;
+
+    location /blog/ {
+        # rewrite ^/blog(.*)$ $1 break;
+        proxy_pass         http://docker-nginx;
+        proxy_redirect     off;
+        proxy_set_header   Host $host;
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Host $server_name;
+    }
+
+    location /comm/ {
+        # rewrite ^/comm(.*)$ $1 break;
+        proxy_pass         http://docker-apache;
+        proxy_redirect     off;
+        proxy_set_header   Host $host;
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Host $server_name;
+    }
+
+}
+</div><p id="2e63a316_132">옵션 설정을 보면 요청 <code class="code" id="2e63a316_133">location</code>에 따라 분기처리 되도록 설정되어있습니다.</p><div class="code-block" data-lang="actionscript">
+location $path {
+    proxy_pass      http://docker-apache;
+}
+</div><p id="2e63a316_135">설정파일에서 설정한 <code class="code" id="2e63a316_136">docker-apache</code>라는 리퀘스트를 넘겨줄 위치를 지정합니다.</p><p id="2e63a316_137">여기서 <code class="code" id="2e63a316_138">rewrite</code>를 사용하는 이유는 프록시 서버의 location 의 주소가 upstream되는 웹 서버에도 영향을 끼치기 때문입니다.</p><p id="2e63a316_139">예를 들어:</p><p id="2e63a316_140"><code class="code" id="2e63a316_141">http://3.2.244.244/blog/text.html</code> 을 통해서 요청을 하면 리버스 프록시를 통해서 아파치 서버로 요청을 하는데 아파치 서버가 받은 요청 주소도 <code class="code" id="2e63a316_142">http://3.2.244.244/blog/text.html</code>가 됩니다.</p><p id="2e63a316_143">현재 아파치 기본 폴더 위치가 <code class="code" id="2e63a316_144">/usr/local/apache2/htdocs</code>에서 불필요한 <code class="code" id="2e63a316_145">path</code>추가로 <code class="code" id="2e63a316_146">/usr/local/apache2/htdocs/blog</code> 안에 파일을 찾기 때문에 분기를 위한 path인 <code class="code" id="2e63a316_147">/blog</code>는 제거해야합니다.</p></section><section class="chapter"><h3 id="rewrite" data-toc="rewrite">rewrite 란</h3><p id="2e63a316_148"><a href="https://www.slingacademy.com/article/url-rewriting-in-nginx-the-ultimate-guide/" id="2e63a316_149" data-external="true" rel="noopener noreferrer">nginx rewrite 설정 참고</a><br><a href="https://nginx.viraptor.info/" id="2e63a316_151" data-external="true" rel="noopener noreferrer">Nginx location match tester</a></p><ul class="list _ul" id="2e63a316_152"><li class="list__item" id="2e63a316_153"><p><span class="control" id="2e63a316_154">rewrite</span>는 <span class="control" id="2e63a316_155">URL 패턴을 매칭</span>하여 <span class="control" id="2e63a316_156">새로운 URL로 변경</span>하는 역할을 합니다.</p></li><li class="list__item" id="2e63a316_157"><p>이를 사용하여 요청된 URL을 다른 경로로 보내거나, 쿼리 매개변수를 추가하거나, 확장자를 변경할 수 있습니다.</p></li></ul><p id="2e63a316_158"><span class="control" id="2e63a316_159">문법</span></p><div class="code-block" data-lang="actionscript">
+rewrite regex replacrement [flag];
+</div><ul class="list _ul" id="2e63a316_161"><li class="list__item" id="2e63a316_162"><p>regex: 매칭되는 URL 패턴을 지정합니다. </p><ul class="list _ul" id="2e63a316_163"><li class="list__item" id="2e63a316_164"><p>Nginx에서 채택한 정규표현식 문법은 PCRE 구문으로,Perl이라는 언어에 유래되었습니다.</p></li></ul></li><li class="list__item" id="2e63a316_165"><p>replacrement : 변경할 url이나 path를 지정할 수 있습니다.</p></li><li class="list__item" id="2e63a316_166"><p>flag: 여러개의 location이 설정되어 있을 때, 변경된 URL이 다른 location으로 매칭될 수 있으므로, 이를 처리할지를 설정 </p><ul class="list _ul" id="2e63a316_167"><li class="list__item" id="2e63a316_168"><p>break를 사용하면, 변경된 url이 다른 location 설정에 따르지 않고 현재 location 설정만 따르고 끝남</p></li><li class="list__item" id="2e63a316_169"><p>break가 아닐 경우 다른 location 설정에 일치하면 그 설정도 적용되므로 무한루프에 빠질 수 있음</p></li></ul></li></ul><p id="2e63a316_170"><span class="control" id="2e63a316_171">분기 path 제거하기</span></p><div class="code-block" data-lang="actionscript">
+location /blog/ {
+    rewrite ^/blog(.*)$ $1 break;
+}
+</div><p id="2e63a316_173">이렇게 작성할 경우 요청이 <code class="code" id="2e63a316_174">localhost/blog/name/info.html</code>로 들어온다면 <code class="code" id="2e63a316_175">location /blog/</code>는 path만 가져오기 때문에 <code class="code" id="2e63a316_176">/blog/name/info.html</code>이 들어옵니다.</p><ul class="list _ul" id="2e63a316_177"><li class="list__item" id="2e63a316_178"><p><code class="code" id="2e63a316_179">^/blog</code>의 의미는 <code class="code" id="2e63a316_180">/blog</code>로 시작하는 path를 의미합니다.</p></li><li class="list__item" id="2e63a316_181"><p><code class="code" id="2e63a316_182">(.*)</code>의 의미는 <code class="code" id="2e63a316_183">.</code> 점은 임의의 한 문자를 의미합니다 </p><ul class="list _ul" id="2e63a316_184"><li class="list__item" id="2e63a316_185"><p><code class="code" id="2e63a316_186">*</code>는 0개 이상을 나타냅니다.</p></li><li class="list__item" id="2e63a316_187"><p><code class="code" id="2e63a316_188">?</code>는 한글 자를 의미합니다.</p></li><li class="list__item" id="2e63a316_189"><p><code class="code" id="2e63a316_190">+</code>는 한글자 이상을 나타냅니다.</p></li></ul></li><li class="list__item" id="2e63a316_191"><p><code class="code" id="2e63a316_192">$</code>의 의미는 끝나는 문자열을 의미합니다.</p></li></ul><p id="2e63a316_193">정리하면, <code class="code" id="2e63a316_194">/blog</code>로 시작하는 path 와 어떤 문자든 상관없이 다시 작성하겠다는 의미입니다.</p><p id="2e63a316_195"><code class="code" id="2e63a316_196">$1</code>은 <code class="code" id="2e63a316_197">()</code>사이에 있는 표현식을 나타내며 만약 <code class="code" id="2e63a316_198">(\d+)-(\d+)-(\d+)</code>는 <code class="code" id="2e63a316_199">$1-$2-$3</code>라고 표현할 수 있습니다.</p><p id="2e63a316_200"><code class="code" id="2e63a316_201">$1</code>이 <code class="code" id="2e63a316_202">\blog(.*)</code>이기 때문에 <code class="code" id="2e63a316_203">\blog</code>뒤에 붙은 모든 path는 <code class="code" id="2e63a316_204">$1</code>에 포함됩니다.</p><div class="code-block" data-lang="actionscript">
+\blog\name\test.html -&gt; \name\text.html
+\blog?name=둘리 -&gt; ?name=둘리
+</div><p id="2e63a316_206">이렇게 path가 변경되어 전달됩니다.</p></section><section class="chapter"><h3 id="2e63a316_207" data-toc="2e63a316_207">참고)</h3><section class="chapter"><h4 id="php" data-toc="php">php 설정</h4><ul class="list _ul" id="2e63a316_208"><li class="list__item" id="2e63a316_209"><p>워드프레스등은 PHP를 사용하며, 이 때는 php 모듈 설치와 함께,nginx에 fastcgi 설정을 해야합니다. </p><ul class="list _ul" id="2e63a316_210"><li class="list__item" id="2e63a316_211"><p>필요할 때 참고</p></li></ul></li></ul></section><section class="chapter"><h4 id="2e63a316_212" data-toc="2e63a316_212">에러페이지 설정</h4><ul class="list _ul" id="2e63a316_213"><li class="list__item" id="2e63a316_214"><p>특정 HTTP 에러에 따라 설정한 별도 에러페이지를 보여주기 위해서 다음과 같이 설정합니다.</p></li></ul><div class="code-block" data-lang="actionscript">
+error_page 403 404 405 406 411 500 501 502 503 504 505 /error.html;
+
+location = /error.html {
+    location = /error.html {
+        root /usr/share/nginx/html;
+    }
+} 
+</div></section><section class="chapter"><h4 id="2e63a316_216" data-toc="2e63a316_216">캐쉬설정</h4><ul class="list _ul" id="2e63a316_217"><li class="list__item" id="2e63a316_218"><p>HTTP 응답에 다음과 같이 ico,css 등으로 끝나는 파일은 브라우저 캐시창에서 최대한 보관하는 명령을 넣을 수 있습니다.</p></li><li class="list__item" id="2e63a316_219"><p>이 경우,웹페이지 로딩 속도는 개선되지만,해당 파일이 변경될 가능성이 있다면,업데이트가 안되므로, 불변하는 파일만 설정하는 것이 좋음</p></li><li class="list__item" id="2e63a316_220"><p>location의 <code class="code" id="2e63a316_221">~*</code>의미는 이후에 나오는 정규표현식에 대소문자 구별을 하지 말라는 의미입니다.</p></li></ul><div class="code-block" data-lang="actionscript">
+location ~* \.(ico|css|js|gif|jpe?g|png)$ {
+  expires max;
+  add_header Pragma public;
+  add_header Cache-Control &quot;public, must-revalidate, proxy-revalidate&quot;;
+}
+</div><p id="2e63a316_223"><a href="https://www.nginx.com/resources/wiki/start/" id="2e63a316_224" data-external="true" rel="noopener noreferrer">Nginx Doc</a><br><a href="https://www.nginx.com/resources/wiki/start/topics/tutorials/config_pitfalls/" id="2e63a316_226" data-external="true" rel="noopener noreferrer">Nginx Doc-Pitfalls and Common Mistakes</a></p></section></section></section><div class="last-modified">Last modified: 13 3월 2024</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="fullstack-park3-sc-10.html" class="navigation-links__prev">웹 서버 이해와 도커로 웹 서부 구축하기</a><a href="fullstack-park3-sc-12-clone.html" class="navigation-links__next">클론코딩-실제 서비스 구축하기</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="https://resources.jetbrains.com/writerside/apidoc/6.6.6-b205/app.js"></script></body></html>
