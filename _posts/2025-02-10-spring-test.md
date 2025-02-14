@@ -179,7 +179,3 @@ spring.jpa.hibernate.ddl-auto=update
 ---
 
 ✅ **결론**: Spring Boot는 최적의 기술 조합을 자동으로 제공하여 빠른 개발을 지원하며, 필요 시 커스터마이징이 가능하지만 지나치게 변경하면 Spring Boot의 장점이 사라질 수 있다.
-
-
-
-스프링 배포 테스트 5
