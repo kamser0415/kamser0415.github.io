@@ -93,7 +93,7 @@ public class HelloApplication {
 
 ---
 
-## 서블릿 직접 등록하기
+### 서블릿 직접 등록하기
 
 ### ServletContextInitializer 사용
 
@@ -123,7 +123,7 @@ webServer.start();
 
 ---
 
-## 프론트 컨트롤러(Front Controller) 패턴
+### 프론트 컨트롤러(Front Controller) 패턴
 
 ### 구현 예시
 ```java
@@ -155,9 +155,9 @@ servletContext.addServlet("frontController", new HttpServlet() {
 
 ---
 
-## 컨트롤러(핸들러) 분리
+### 컨트롤러(핸들러) 분리
 
-### 구현 예시
+#### 구현 예시
 ```java
 public class HelloController {
     public String hello(String name) {
