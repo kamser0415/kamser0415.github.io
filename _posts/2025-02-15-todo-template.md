@@ -1,6 +1,6 @@
 ---
 layout: single
-title: 투두리스트
+title: 투두리스트 템플릿
 categories: todo
 tag: [todo]
 toc: true
