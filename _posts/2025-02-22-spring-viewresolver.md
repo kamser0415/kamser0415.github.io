@@ -1,8 +1,8 @@
 ---
 layout: single
-title: 스프링과 viewResolver 학습
-categories: TIL
-tag: [Today I Learned]
+title: 스프링 viewResolver, 포워드와 리다이렉트
+categories: spring
+tag: [spring, viewResolver]
 toc: true
 toc_sticky: true
 author_profile: false
@@ -14,21 +14,28 @@ sidebar:
 typora-root-url: ../
 ---
 
-## 📌 2025-02-22 TIL
+## 📌 ViewResolver 학습
 
 ## 1. 오늘의 학습 주제
-- 외장 톰캣과 내장 톰캣의 트레이드 오프 및 무중단 배포 전략
+### 
 
-## 2. 학습 내용 요약
-- **내장 톰캣:**  
-  - 개발 및 배포 간소화  
-  - 애플리케이션별 독립 인스턴스 관리
-- **외장 톰캣:**  
-  - 자원 효율적으로 여러 애플리케이션 운용  
-  - 공유 자원 관리의 복잡성 (커넥션, 스레드 풀 등)
-- **무중단 배포 전략:**  
-  - 로드 밸런서를 활용한 다중 인스턴스 운영  
-  - 톰캣의 Parallel Deployment 기능 활용
+
+
+## 2. 학습 내용
+### 기본 원리와 이해
+
+클라이언트 요청에 대해 컨트롤러가 응답을 할때 View의 이름을 반환하면, ViewResolver가 이름을 해석하여 실제 view 파일로 연결해주는 역할을 합니다.  
+**컨트롤러와 view의 의존성을 낮추기 위해 사용됩니다.**
+
+#### ViewResolver가 없다면
+
+컨트롤러가 View의 구체적인 경로와 확장자를 알아야 하므로, View가 바뀌면 컨트롤러도 수정해야합니다.
+
+#### 유연성을 추가로 준다.
+
+기존 서버 사이드 랜더링된 코드를 그대로 유지하고 json 형식으로 반환 할 수 도 있습니다.
+
+스프링은 컨트롤러뿐만 아니라 view 경로까지도 컨트롤러가 직접 아는게 아니라 DI를 하게 합니다.
 
 ## 3. 핵심 트레이드 오프 및 고민 포인트
 - 내장 톰캣: 배포 및 개발 환경의 단순함 vs. 인스턴스 수 증가 시 자원 오버헤드
