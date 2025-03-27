@@ -64,9 +64,34 @@ Mock 객체는 이미 명령대로 움직이는 로봇 강아지라면 이 친�
 
 #### @SpyBean
 
-Spy 객체를 빈으로 등록하는 애노테이션 입니다.
+스프링 컨테이너가 원본 객체를 빈으로 등록합니다.
 
-스파이 빈은 어노테이션에 등록된 애들어
+스프링 컨테이너가 테스트 모듈에 있는 빈 후처리기로 빈 초기화 전에 스파이 객체로 전환합니다.
+
+그리고 트랜잭션 AOP가 적용 됩니다.
+
+```java
+@Test
+public void testTransactionManagerActiveWithMocking() {
+  Product product = Product.builder().productNumber("001").name("아메리카노").build();
+  Order order = Order.builder().orderStatus(OrderStatus.INIT).build();
+
+  // saveOrder 모킹 + 트랜잭션 매니저 상태 확인
+  doAnswer(invocation -> {
+    boolean isTxActive = TransactionSynchronizationManager.isActualTransactionActive();
+    System.out.println("트랜잭션" + isTxActive);
+    throw new IOException("");
+    // 여기서 DB 작업 없이 단순 확인만
+
+  }).when(productService).saveOrder(any(Order.class));
+
+  // 실행
+  productService.saveProductAndOrder(order, product);
+
+  // 검증
+  verify(productService).saveOrder(order);
+}
+```
 
 
 
@@ -78,6 +103,48 @@ Mock 객체나 Spy객체를 의존하는 테스트 대상 오브젝트에게 사
 
 간단하게 어노테이션으로 @Mock, @Spy 객체를 등록하도록 도와줍니다.
 
+없이 코드를 적용해야한다면 아래와 같이 작성해야합니다.
+
+```java
+public class UserServiceTest {
+
+	// 모킹할 의존성
+	@Mock
+	private UserRepository userRepository;
+	// 테스트 대상 객체
+	private UserService userService;
+  
+	@BeforeEach
+	public void init() {
+		MockitoAnnotations.initMocks(this);
+		userService = new UserService(userRepository);
+	}
+}
+```
+
+또는
+
+```java
+public class UserServiceTest {
+
+	// 모킹할 의존성
+	private UserRepository userRepository;
+
+	// 테스트 대상 객체
+	// @InjectMocks
+	private UserService userService;
+
+	@BeforeEach
+	public void init() {
+		userRepository = mock(UserRepository.class);
+		userService = new UserService(userRepository);
+	}
+  
+}
+```
+
+
+
 
 
 ### 정리
@@ -85,15 +152,9 @@ Mock 객체나 Spy객체를 의존하는 테스트 대상 오브젝트에게 사
 1. @~Bean이 붙은것
 2. @~Bean이 안붙은것
 
-`@*Bean`이라고 붙은 것은 스프링 컨테이너에 원본 빈이 아니라 `@Mock,Spy` 모의 객체가 등록됩니다.
+`@*Bean`이라고 붙은 것은 스프링 컨테이너가 빈 초기화 전에 프록시 모의 객체로 전환하여 감싸게 됩니다.
 
-`@Component`가 붙은거라고 이해했습니다.
-
-스프링 컨테이너를 활용하지만 주의사항은 원본 객체에 트랜잭션이나 @AOP가 있다면 적용되지 않습니다.
-
-**@MockBean**은 스프링 컨텍스트 내의 원본 빈을 완전히 대체합니다.
-따라서 원본 빈에 적용되어 있던 **@Transactional** 같은 AOP 기반 어노테이션은 적용되지 않습니다.  
-즉, 스프링은 해당 빈을 Mockito 목 객체로 대체하고, AOP 프록시를 생성할 필요 없이 단순한 목 객체만 등록합니다.
+그래서 @AOP가 적용 안되는 것처럼 보일 수 있으나 실제는 @AOP는 호출하는 빈이 모의 객체인지 모릅니다.
 
 
 
@@ -162,7 +223,10 @@ void cannotUpdateCommentWhenUserIsNotWriter() {
 }"
 ```
 
+테스트하려는 것은 쿠폰 기능이므로 사용자의 생성 준비나 게시글 생성준비가 아니라고 생각합니다.
 
+1. 여기서 중요한 것은 댓글이 되는지 잘 안되는 지 확인합니다.
+2. 그러면 댓글을 쓸때 게시글 정보와 회원 정보가 필요하나 어떻게 만드는지  준비 과정은 오히려 테스트의 목적을 흐리게 한다고 생각합니다.
 
 ### 출처
 
