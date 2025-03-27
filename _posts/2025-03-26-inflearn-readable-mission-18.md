@@ -220,7 +220,7 @@ void cannotUpdateCommentWhenUserIsNotWriter() {
 
     // then
     검증        
-}"
+}
 ```
 
 테스트하려는 것은 쿠폰 기능이므로 사용자의 생성 준비나 게시글 생성준비가 아니라고 생각합니다.
