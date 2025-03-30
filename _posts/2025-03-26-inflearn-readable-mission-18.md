@@ -1,6 +1,6 @@
 ---
 layout: single
-title: 인프런 Readable-code Day 16 미션
+title: 인프런 Readable-code Day 18 미션
 categories: warmup-club
 tag: [inflearn, mission]
 toc: true
